@@ -21,7 +21,7 @@ All items below are concepts until shipped and independently testable:
 Subject to technical, legal and security review, DIGO may be used for service payments, API access credits, agent settlement, developer incentives and ecosystem governance. Any payment or access utility must have clear pricing, refund/error handling, anti-abuse controls and a usable non-token fallback where legally or operationally appropriate. No utility is live today and no future demand is guaranteed.
 
 ## 5. Token design
-Proposed DIGO token on Solana, 9 decimals, with an initial mint target of **100 billion DIGO**. The founder's current preference is to retain mint authority for possible future issuance and revoke freeze authority. Consequently, 100 billion is not a permanent supply cap. Future issuance policy, authority custody and allocation/vesting details must be published before launch.
+Proposed DIGO token on Solana, 8 decimals, with an initial mint target of **100 billion DIGO**. The founder's current preference is to retain mint authority for possible future issuance and revoke freeze authority. Consequently, 100 billion is not a permanent supply cap. Future issuance policy, authority custody and allocation/vesting details must be published before launch.
 
 ## 6. Architecture principles
 - Keep AI inference and compute off-chain; use Solana for settlement, identity references and verifiable coordination where appropriate.
