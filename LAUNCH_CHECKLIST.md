@@ -5,7 +5,7 @@ Do not sign a mainnet transaction until every required decision is approved and 
 ## Founder decisions
 - [ ] Confirm exact token name and symbol
 - [ ] Confirm original SPL Token vs Token-2022 after checking target wallet/exchange compatibility
-- [ ] Confirm 9 decimals and initial mint amount of 1,000,000,000 DIGO
+- [ ] Confirm **8 decimals** and initial mint amount of **100,000,000,000 DIGO**. SPL Token's u64 base-unit supply field cannot represent 100 billion whole tokens at 9 decimals.
 - [ ] Confirm mint authority retention, custody and issuance policy
 - [ ] Confirm freeze authority revocation
 - [ ] Approve final allocation table totaling 100%
