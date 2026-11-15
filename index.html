@@ -218,7 +218,7 @@ async function prepareMetadata(){
  if(existing)throw new Error("Metadata account already exists. No transaction is needed.");
  const latest=await connection.getLatestBlockhash("confirmed");
  const tx=new Transaction({feePayer:wallet,recentBlockhash:latest.blockhash}).add(ix);
- const sim=await connection.simulateTransaction(tx,[mint]);
+ const sim=await connection.simulateTransaction(tx,[]);
  if(sim.value.err)throw new Error("Metadata simulation failed: "+JSON.stringify(sim.value.err)+" "+(sim.value.logs||[]).join(" | "));
  const fee=await connection.getFeeForMessage(tx.compileMessage(),"confirmed");
  if(fee.value===null)throw new Error("Could not estimate network fee.");
