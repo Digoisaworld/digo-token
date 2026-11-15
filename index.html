@@ -56,7 +56,20 @@
    " | connect(): "+(!!provider&&typeof provider.connect==="function")+
    " | isConnected: "+(provider?String(!!provider.isConnected):"n/a")+
    " | userAgent: "+navigator.userAgent);
-  setTimeout(function(){if(!window.__DIGO_MODULE_READY__)report(out.textContent+" | ERROR: Solana module did not finish loading. Check network/content blockers or import failure.");},2500);
+  setTimeout(async function(){
+   if(window.__DIGO_MODULE_READY__)return;
+   report("Running direct dependency tests from the button click…");
+   const tests=[
+    ["buffer","https://esm.sh/buffer@6.0.3"],
+    ["web3.js","https://esm.sh/@solana/web3.js@1.98.4"],
+    ["spl-token","https://esm.sh/@solana/spl-token@0.4.13?external=@solana/web3.js"]
+   ];
+   const results=await Promise.all(tests.map(async([name,url])=>{
+    try{await import(url);return name+": OK";}
+    catch(e){return name+": FAILED — "+(e&&e.message?e.message:String(e));}
+   }));
+   report("Direct import tests: "+results.join(" | ")+" | online: "+navigator.onLine+" | module ready: "+!!window.__DIGO_MODULE_READY__);
+  },500);
  },true);
  window.addEventListener("load",function(){setTimeout(function(){if(!window.__DIGO_MODULE_READY__)report("Page loaded, but Solana module has not initialized. Check JavaScript import/network errors.");},1500);});
 })();
