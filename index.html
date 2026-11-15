@@ -127,13 +127,20 @@ document.getElementById("connect").addEventListener("click",async()=>{
  }
  catch(e){status.textContent="Phantom connection did not complete: "+(e.message||String(e));setStatus("Wallet is not connected. No transaction was sent.");}
 });
+let prepareStage="Not started";
 async function prepare(){
+ prepareStage="Checking Phantom wallet";
  if(!provider||!wallet)throw new Error("Connect Phantom first.");
  if(wallet.toBase58()!==EXPECTED)throw new Error("Connected wallet does not match the previously confirmed recipient address. Disconnect and select the correct Phantom account.");
+ prepareStage="Generating temporary mint keypair";
  const mint=Keypair.generate();
+ prepareStage="Deriving associated token account";
  const ata=await getAssociatedTokenAddress(mint.publicKey,wallet,false,TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID);
+ prepareStage="Fetching mint account rent from Solana";
  const rent=await getMinimumBalanceForRentExemptMint(connection);
+ prepareStage="Fetching token account rent from Solana";
  const ataRent=await connection.getMinimumBalanceForRentExemption(165,"confirmed");
+ prepareStage="Fetching latest Mainnet blockhash";
  const latest=await connection.getLatestBlockhash("confirmed");
  const tx=new Transaction({feePayer:wallet,recentBlockhash:latest.blockhash});
  tx.add(SystemProgram.createAccount({fromPubkey:wallet,newAccountPubkey:mint.publicKey,space:MINT_SIZE,lamports:rent,programId:TOKEN_PROGRAM_ID}));
@@ -141,20 +148,24 @@ async function prepare(){
  tx.add(createAssociatedTokenAccountInstruction(wallet,ata,wallet,mint.publicKey,TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID));
  tx.add(createMintToInstruction(mint.publicKey,ata,wallet,10000000000000000000n,[],TOKEN_PROGRAM_ID));
  tx.partialSign(mint);
+ prepareStage="Simulating transaction on Solana Mainnet";
  const sim=await connection.simulateTransaction(tx,{sigVerify:false,replaceRecentBlockhash:true});
  if(sim.value.err)throw new Error("Simulation failed: "+JSON.stringify(sim.value.err)+" "+(sim.value.logs||[]).join(" | "));
+ prepareStage="Estimating transaction network fee";
  const fee=await connection.getFeeForMessage(tx.compileMessage(),"confirmed");
  if(fee.value===null)throw new Error("Could not estimate transaction fee. Try again.");
+ prepareStage="Reading Phantom wallet SOL balance";
  const balance=await connection.getBalance(wallet,"confirmed");
  const total=rent+ataRent+fee.value;
  if(balance<total)throw new Error("Insufficient SOL. Required at least "+(total/LAMPORTS_PER_SOL).toFixed(6)+" SOL for mint rent and estimated network fee; available "+(balance/LAMPORTS_PER_SOL).toFixed(6)+" SOL.");
+ prepareStage="Preparing transaction review details";
  prepared={mint,ata,tx,latest,rent,ataRent,fee:fee.value,balance};
  details.textContent="Mint address: "+mint.publicKey.toBase58()+"\nRecipient token account: "+ata.toBase58()+"\nMint account rent: "+(rent/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nATA rent (165-byte token account): "+(ataRent/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nEstimated network fee: "+(fee.value/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nTotal estimated required: "+(total/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nCurrent wallet balance: "+(balance/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nSimulation: successful.\nTransaction: 4 instructions; create mint, initialize 8 decimals/no freeze authority, create ATA, mint 100B DIGO.";
  approveBtn.disabled=false;
  setStatus("Simulation succeeded. Review the mint address and costs below. No transaction has been sent.");
 }
 prepareMetadataBtn.disabled=true;
-prepareBtn.addEventListener("click",async()=>{prepareBtn.disabled=true;approveBtn.disabled=true;details.textContent="Preparing and simulating on Mainnet...";try{await prepare();}catch(e){setStatus(e.message||String(e));}finally{prepareBtn.disabled=!wallet; }});
+prepareBtn.addEventListener("click",async()=>{prepareBtn.disabled=true;approveBtn.disabled=true;details.textContent="Preparing and simulating on Mainnet...";try{await prepare();}catch(e){const msg="Failed at: "+prepareStage+" | "+(e?.message||String(e));setStatus(msg);details.textContent=msg+"\nError name: "+(e?.name||"unknown")+"\nDetails: "+(e?.stack||"No stack trace");}finally{prepareBtn.disabled=!wallet; }});
 approveBtn.addEventListener("click",async()=>{
  if(!prepared||!provider) return;
  approveBtn.disabled=true;
