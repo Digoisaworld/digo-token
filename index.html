@@ -53,8 +53,11 @@ function getProvider(){return window.phantom?.solana ?? window.solana ?? null;}
 function setStatus(t){launchStatus.textContent=t;}
 document.getElementById("connect").addEventListener("click",async()=>{
  provider=getProvider();
- if(!provider?.isPhantom){status.textContent="Open this website in Phantom's in-app browser.";return;}
- status.textContent="Connecting to Phantom… approve the connection request in the wallet if prompted.";
+ if(!provider || typeof provider.connect!=="function"){
+  status.textContent="Phantom provider was not detected in this page. Open the URL directly in Phantom's in-app browser (not Chrome or an external tab), then reload.";
+  return;
+ }
+ status.textContent="Phantom provider detected"+(provider.isPhantom?" (verified flag present)":" (provider flag unavailable)")+". Requesting wallet connection…";
  try{
   const r=await Promise.race([
    provider.connect(),
