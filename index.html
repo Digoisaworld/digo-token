@@ -107,6 +107,14 @@ const metadataStatus=document.getElementById("metadataStatus"), metadataDetails=
 const metadataMintInput=document.getElementById("metadataMint"), prepareMetadataBtn=document.getElementById("prepareMetadata"), approveMetadataBtn=document.getElementById("approveMetadata");
 function getProvider(){return window.phantom?.solana ?? window.solana ?? null;}
 function setStatus(t){launchStatus.textContent=t;}
+async function simulateLegacyTransaction(tx){
+ const raw=tx.serialize({requireAllSignatures:false,verifySignatures:false});
+ const encoded=Buffer.from(raw).toString("base64");
+ const response=await connection._rpcRequest("simulateTransaction",[encoded,{encoding:"base64",sigVerify:false,replaceRecentBlockhash:true,commitment:"confirmed"}]);
+ if(response.error)throw new Error("RPC simulation request failed: "+JSON.stringify(response.error));
+ if(!response.result||!response.result.value)throw new Error("RPC returned an invalid simulation response: "+JSON.stringify(response));
+ return response.result;
+}
 document.getElementById("connect").addEventListener("click",async()=>{
  provider=getProvider();
  if(!provider || typeof provider.connect!=="function"){
@@ -149,7 +157,7 @@ async function prepare(){
  tx.add(createMintToInstruction(mint.publicKey,ata,wallet,10000000000000000000n,[],TOKEN_PROGRAM_ID));
  tx.partialSign(mint);
  prepareStage="Simulating transaction on Solana Mainnet";
- const sim=await connection.simulateTransaction(tx,[mint]);
+ const sim=await simulateLegacyTransaction(tx);
  if(sim.value.err)throw new Error("Simulation failed: "+JSON.stringify(sim.value.err)+" "+(sim.value.logs||[]).join(" | "));
  prepareStage="Estimating transaction network fee";
  const fee=await connection.getFeeForMessage(tx.compileMessage(),"confirmed");
@@ -218,7 +226,7 @@ async function prepareMetadata(){
  if(existing)throw new Error("Metadata account already exists. No transaction is needed.");
  const latest=await connection.getLatestBlockhash("confirmed");
  const tx=new Transaction({feePayer:wallet,recentBlockhash:latest.blockhash}).add(ix);
- const sim=await connection.simulateTransaction(tx,[]);
+ const sim=await simulateLegacyTransaction(tx);
  if(sim.value.err)throw new Error("Metadata simulation failed: "+JSON.stringify(sim.value.err)+" "+(sim.value.logs||[]).join(" | "));
  const fee=await connection.getFeeForMessage(tx.compileMessage(),"confirmed");
  if(fee.value===null)throw new Error("Could not estimate network fee.");
