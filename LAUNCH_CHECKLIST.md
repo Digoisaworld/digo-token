@@ -20,12 +20,14 @@
 - [x] Logo is present at `assets/digo-logo.png`.
 - [x] `metadata/token.json` references the public PNG logo.
 - [x] The website's Connect Phantom button returned the intended public address in Phantom's in-app browser.
-- [ ] Verify signing capability with a clearly described, non-transaction message-signing challenge if needed. A connect response alone does not prove that the site can submit signed transactions.
+- [ ] Verify signing capability and transaction flow in Phantom on a controlled test before Mainnet use. The published launch interface now contains a prepare/simulate/review/approve flow, but it has not yet been browser-tested. A connect response alone does not prove that the site can submit signed transactions.
 
 ## Still required before any Mainnet signature
 - [ ] Confirm the wallet address again in Phantom immediately before launch.
 - [ ] Review and pin audited, versioned client dependencies; do not load unpinned scripts.
-- [ ] Build and review the exact transaction instructions and account metas.
+- [x] Add a client-side Mainnet transaction preparation flow to the website: generate mint keypair in-browser, create SPL mint with 8 decimals and no freeze authority, create recipient ATA, and mint 100 billion DIGO.
+- [x] Require successful RPC simulation and display mint address, ATA, rent, estimated network fee and wallet balance before enabling Phantom approval.
+- [ ] Browser-test the transaction flow and review exact instructions/account metas before Mainnet use.
 - [ ] Obtain live rent-exemption and network-fee estimates from Mainnet RPC immediately before signing.
 - [ ] Confirm the mint keypair is generated locally in the browser and never uploaded; explain how its public key/mint address is retained.
 - [ ] Create the mint with 8 decimals, mint authority set to the intended wallet, and freeze authority set to None.
