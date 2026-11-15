@@ -24,7 +24,7 @@
 | Symbol | DIGO |
 | Network | Solana Mainnet |
 | Standard | Original SPL Token currently proposed; compatibility review pending |
-| Decimals | 9 |
+| Decimals | **8** |
 | Initial mint target | **100,000,000,000 DIGO** |
 | Mint authority | Remains active by founder preference; custody and issuance policy pending |
 | Freeze authority | Revoke |
