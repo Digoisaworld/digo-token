@@ -1,64 +1,57 @@
-# DIGO — A kind dog
+# DIGO — AI × Solana
 
-**DIGO** is being developed as a transparent, community-first Solana project — not merely a token launch.
-
-> A kind dog. A token on Solana.
+**DIGO** is being developed as a technology-focused project exploring practical coordination and payments for AI agents and digital services on Solana.
 
 ## Project status
 
 - [x] Public project repository created
-- [x] Initial project charter and tokenomics documented
-- [ ] Logo and immutable public metadata hosted
+- [x] Initial project charter and draft tokenomics documented
+- [x] DIGO mascot artwork received
+- [ ] Final logo asset and public metadata hosted
 - [ ] Mainnet mint created and independently verified
-- [ ] Distribution and treasury wallets published
-- [ ] Utility MVP shipped
-- [ ] Liquidity bootstrapped transparently
-- [ ] Independent security review
-- [ ] Exchange application package prepared
+- [ ] Allocation, vesting and authority policy finalized
+- [ ] AI utility prototype shipped on testnet
+- [ ] Mainnet utility and independent security review
+- [ ] Transparent liquidity and exchange due-diligence package
 
-**Important:** DIGO has not yet been created on Solana Mainnet. No mint address, market price, liquidity, exchange listing, or guaranteed value is being claimed. Official addresses will be published here only after on-chain verification.
+**Important:** DIGO has not yet been created on Solana Mainnet. No mint address, market price, liquidity, exchange listing, partnership or live AI service is being claimed.
 
 ## Proposed token parameters
 
-| Parameter | Plan |
+| Parameter | Current plan |
 |---|---|
 | Name | DIGO |
 | Symbol | DIGO |
 | Network | Solana Mainnet |
-| Standard | Original SPL Token + Metaplex Token Metadata |
+| Standard | Original SPL Token currently proposed; compatibility review pending |
 | Decimals | 9 |
-| Planned maximum supply | 1,000,000,000 DIGO |
+| Initial mint target | **100,000,000,000 DIGO** |
+| Mint authority | Remains active by founder preference; custody and issuance policy pending |
 | Freeze authority | Revoke |
-| Mint authority | Governance-controlled at launch; policy must be finalized before minting |
 
-The original SPL Token program is selected initially for broad wallet and exchange compatibility. Avoid adding Token-2022 extensions until target integrations confirm support.
+The 100 billion figure is the planned initial mint, not a permanent maximum, because the mint authority is intended to remain active. Future issuance can dilute holders and must be disclosed.
 
-## What makes DIGO useful?
+## Proposed AI and technology utility
 
-The project will prioritize verifiable utility over speculative promises:
+1. **DIGO Agent Hub** — discoverable directory of AI agents and tools.
+2. **AI API Marketplace** — metered access to participating model, data and automation APIs.
+3. **Agent Payments** — settlement between AI agents and service providers.
+4. **Compute Integrations** — connections to independent inference/GPU providers.
+5. **Developer SDK and Dashboard** — integrations, test tools, supply, treasury and usage transparency.
 
-1. **DIGO Community Hub** — transparent treasury, proposals, votes, releases and public metrics.
-2. **Kind Actions** — community campaigns supporting animal welfare and local kindness initiatives, with receipts and public reporting.
-3. **DIGO Rewards** — opt-in rewards for verifiable contributions, with anti-sybil controls and published rules. No guaranteed yield.
-4. **Merchant/creator integrations** — simple Solana Pay-compatible payment and donation flows, subject to testing.
-5. **Open analytics** — supply, holder concentration, treasury movements, liquidity and program status dashboards.
-
-See [ROADMAP.md](ROADMAP.md), [TOKENOMICS.md](TOKENOMICS.md), and [SECURITY.md](SECURITY.md).
+These are roadmap concepts, not live products or guaranteed sources of token demand. AI inference remains off-chain; Solana may provide settlement and verifiable coordination.
 
 ## Principles
 
-- No fake volume, wash trading, undisclosed paid promotion, or guaranteed returns.
-- No hidden minting, undisclosed team allocations, or misleading supply claims.
-- Publish wallet addresses, vesting schedules, treasury movements, and material changes.
-- Security and exchange compatibility take priority over novelty.
+- No fake volume, wash trading, undisclosed paid promotion or guaranteed returns.
+- No hidden minting or undisclosed team allocations.
+- Publish authority control, issuance events, allocations, vesting and treasury movements.
+- Never place private prompts, API keys or personal secrets on-chain.
 - A listing is always the exchange's independent decision; no feature can guarantee it.
 
 ## Links
-
-- Website: to be published
-- Solana explorer mint: not created yet
+- Website: GitHub Pages deployment pending verification
+- Solana mint: not created yet
 - Community channels: to be published
 
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md). Until the token parameters and legal structure are finalized, this repository is a project build-out and not an investment offer.
+See [TOKENOMICS.md](TOKENOMICS.md), [LITEPAPER.md](LITEPAPER.md), [ROADMAP.md](ROADMAP.md), [SECURITY.md](SECURITY.md) and [EXCHANGE_READINESS.md](EXCHANGE_READINESS.md).
