@@ -103,6 +103,8 @@ const connection=new Connection(RPC,"confirmed");
 const status=document.getElementById("walletStatus"), launchStatus=document.getElementById("launchStatus");
 const walletLabel=document.getElementById("launchWallet"), prepareBtn=document.getElementById("prepare"), approveBtn=document.getElementById("approve"), details=document.getElementById("txDetails");
 let provider=null, wallet=null, prepared=null;
+const metadataStatus=document.getElementById("metadataStatus"), metadataDetails=document.getElementById("metadataDetails");
+const metadataMintInput=document.getElementById("metadataMint"), prepareMetadataBtn=document.getElementById("prepareMetadata"), approveMetadataBtn=document.getElementById("approveMetadata");
 function getProvider(){return window.phantom?.solana ?? window.solana ?? null;}
 function setStatus(t){launchStatus.textContent=t;}
 document.getElementById("connect").addEventListener("click",async()=>{
@@ -171,8 +173,6 @@ approveBtn.addEventListener("click",async()=>{
 });
 
 
-const metadataStatus=document.getElementById("metadataStatus"), metadataDetails=document.getElementById("metadataDetails");
-const metadataMintInput=document.getElementById("metadataMint"), prepareMetadataBtn=document.getElementById("prepareMetadata"), approveMetadataBtn=document.getElementById("approveMetadata");
 let preparedMetadata=null;
 function metadataText(value){const b=new TextEncoder().encode(value);return [b.length&255,(b.length>>8)&255,(b.length>>16)&255,(b.length>>24)&255,...b];}
 function metadataInstruction(mint){
