@@ -19,6 +19,14 @@
 <div class="grid"><article class="card"><h3>AI Agent Hub</h3><p>A discoverable directory of AI agents, tools, service profiles and reputation signals.</p></article><article class="card"><h3>AI API Marketplace</h3><p>Explore metered access to participating model, data and automation APIs.</p></article><article class="card"><h3>Agent Payments</h3><p>Prototype settlement between AI agents and digital-service providers.</p></article><article class="card"><h3>Developer Tools</h3><p>SDKs, integrations and transparent usage metrics for the ecosystem.</p></article></div></section>
 <section id="utility"><h2>Token plan</h2><div class="stats"><div class="stat"><b>DIGO</b>Token symbol</div><div class="stat"><b>Solana</b>Network</div><div class="stat"><b>8</b>Decimals planned</div><div class="stat"><b>100B</b>Initial mint target</div></div>
 <div class="notice"><strong>Launch status:</strong> The DIGO mainnet token has not yet been created. No mint address, price, liquidity, live AI service or exchange listing is being claimed. The planned initial mint is 100 billion DIGO; because mint authority is intended to remain active, this is not a permanent maximum supply.</div></section>
+<section class="launch" id="metadata"><h2>Register DIGO metadata</h2>
+<p>This is a separate step for an already-created SPL Mint. It registers the token name, symbol and logo URI with the Metaplex Token Metadata program. It cannot create a mint and it will not run automatically.</p>
+<p><strong>Required:</strong> an existing Mainnet SPL mint with 8 decimals, initial supply of 100 billion DIGO, and mint authority still controlled by the connected Phantom wallet.</p>
+<label for="metadataMint">Existing DIGO Mint address</label><br><input id="metadataMint" class="btn mono" style="width:min(100%,620px);text-align:left" placeholder="Paste the confirmed Mainnet mint address" autocomplete="off">
+<div class="actions" style="justify-content:flex-start"><button class="btn" id="prepareMetadata" disabled>1. Verify mint and simulate metadata</button><button class="btn primary" id="approveMetadata" disabled>2. Review and approve in Phantom</button></div>
+<div id="metadataStatus" aria-live="polite" class="small"></div><div id="metadataDetails" class="small mono"></div>
+<p class="small">Metadata URI currently points to the project's GitHub-hosted JSON. GitHub is convenient but does not guarantee permanent decentralized storage. The metadata account will remain mutable so the project can update its URI later.</p>
+</section>
 <section class="launch" id="launch"><h2>Prepare DIGO Mainnet mint</h2>
 <p>This tool prepares one transaction containing mint-account creation, SPL Token initialization, your associated token account creation and the initial mint of 100 billion DIGO. It does not send anything until you separately approve the final action in Phantom.</p>
 <p><strong>Wallet:</strong> <span id="launchWallet" class="mono">Not connected</span><br><strong>Network:</strong> Solana Mainnet Beta<br><strong>Token program:</strong> Original SPL Token<br><strong>Decimals:</strong> 8<br><strong>Initial supply:</strong> 100,000,000,000 DIGO<br><strong>Mint authority:</strong> Your connected Phantom wallet<br><strong>Freeze authority:</strong> None</p>
@@ -30,9 +38,9 @@
 </main><footer>© DIGO Project · Built in public. No guaranteed returns or exchange listings.</footer>
 </div>
 <script type="module">
-import {Connection,PublicKey,Keypair,SystemProgram,Transaction,LAMPORTS_PER_SOL} from "https://esm.sh/@solana/web3.js@1.98.4";
-import {TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID, MINT_SIZE, getMinimumBalanceForRentExemptMint, createInitializeMintInstruction, getAssociatedTokenAddress, createAssociatedTokenAccountInstruction, createMintToInstruction} from "https://esm.sh/@solana/spl-token@0.4.13?external=@solana/web3.js";
-const EXPECTED="HK7Fh86hwAQwjqmLrm8L1JLVS57Eo7jD2FfzaHdhmZbQ";
+import {Connection,PublicKey,Keypair,SystemProgram,Transaction,TransactionInstruction,LAMPORTS_PER_SOL} from "https://esm.sh/@solana/web3.js@1.98.4";
+import {TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID, MINT_SIZE, getMinimumBalanceForRentExemptMint, createInitializeMintInstruction, getAssociatedTokenAddress, createAssociatedTokenAccountInstruction, createMintToInstruction, getMint} from "https://esm.sh/@solana/spl-token@0.4.13?external=@solana/web3.js";
+const EXPECTED="HK7Fh86hwAQwjqmLrm8L1JLVS57Eo7jD2FfzaHdhmZbQ";\nconst METADATA_PROGRAM_ID=new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");\nconst METADATA_URI="https://raw.githubusercontent.com/ehsanatashzaban5-hub/digo-token/main/metadata/token.json";
 const RPC="https://api.mainnet-beta.solana.com";
 const connection=new Connection(RPC,"confirmed");
 const status=document.getElementById("walletStatus"), launchStatus=document.getElementById("launchStatus");
@@ -72,7 +80,7 @@ async function prepare(){
  approveBtn.disabled=false;
  setStatus("Simulation succeeded. Review the mint address and costs below. No transaction has been sent.");
 }
-prepareBtn.addEventListener("click",async()=>{prepareBtn.disabled=true;approveBtn.disabled=true;details.textContent="Preparing and simulating on Mainnet...";try{await prepare();}catch(e){setStatus(e.message||String(e));}finally{prepareBtn.disabled=!wallet; }});
+prepareMetadataBtn.disabled=true;\nprepareBtn.addEventListener("click",async()=>{prepareBtn.disabled=true;approveBtn.disabled=true;details.textContent="Preparing and simulating on Mainnet...";try{await prepare();}catch(e){setStatus(e.message||String(e));}finally{prepareBtn.disabled=!wallet; }});
 approveBtn.addEventListener("click",async()=>{
  if(!prepared||!provider) return;
  approveBtn.disabled=true;
@@ -88,5 +96,72 @@ approveBtn.addEventListener("click",async()=>{
   details.textContent+="\nTransaction signature: "+signature+"\nMint address: "+prepared.mint.publicKey.toBase58()+"\nExplorer: https://explorer.solana.com/tx/"+signature;
   setStatus("Mainnet transaction confirmed. Independently verify mint supply, decimals, authorities and ATA on Solana Explorer before announcing DIGO.");
  }catch(e){setStatus("Not confirmed: "+(e.message||String(e))+". If Phantom rejected it, no token was created.");approveBtn.disabled=false;}
+});
+
+
+const metadataStatus=document.getElementById("metadataStatus"), metadataDetails=document.getElementById("metadataDetails");
+const metadataMintInput=document.getElementById("metadataMint"), prepareMetadataBtn=document.getElementById("prepareMetadata"), approveMetadataBtn=document.getElementById("approveMetadata");
+let preparedMetadata=null;
+function metadataText(value){const b=new TextEncoder().encode(value);return [b.length&255,(b.length>>8)&255,(b.length>>16)&255,(b.length>>24)&255,...b];}
+function metadataInstruction(mint){
+ const [metadata]=PublicKey.findProgramAddressSync([new TextEncoder().encode("metadata"),METADATA_PROGRAM_ID.toBytes(),mint.toBytes()],METADATA_PROGRAM_ID);
+ const name="DIGO",symbol="DIGO",uri=METADATA_URI;
+ const data=Uint8Array.from([33,...metadataText(name),...metadataText(symbol),...metadataText(uri),0,0,0,0,0,1,0]);
+ const keys=[
+  {pubkey:metadata,isSigner:false,isWritable:true},
+  {pubkey:mint,isSigner:false,isWritable:false},
+  {pubkey:wallet,isSigner:true,isWritable:false},
+  {pubkey:wallet,isSigner:true,isWritable:true},
+  {pubkey:wallet,isSigner:false,isWritable:false},
+  {pubkey:SystemProgram.programId,isSigner:false,isWritable:false},
+  {pubkey:new PublicKey("SysvarRent111111111111111111111111111111111"),isSigner:false,isWritable:false}
+ ];
+ return {metadata,ix:new TransactionInstruction({keys,programId:METADATA_PROGRAM_ID,data:Buffer.from(data)})};
+}
+
+
+async function prepareMetadata(){
+ if(!provider||!wallet)throw new Error("Connect the intended Phantom wallet first.");
+ if(wallet.toBase58()!==EXPECTED)throw new Error("Connected wallet does not match the previously confirmed wallet.");
+ const mint=new PublicKey(metadataMintInput.value.trim());
+ const info=await connection.getAccountInfo(mint,"confirmed");
+ if(!info||!info.owner.equals(TOKEN_PROGRAM_ID))throw new Error("This address is not an initialized Original SPL Token mint on Mainnet.");
+ const state=await getMint(connection,mint,"confirmed",TOKEN_PROGRAM_ID);
+ if(state.decimals!==8)throw new Error("Mint decimals are "+state.decimals+", not the planned 8.");
+ if(!state.mintAuthority||!state.mintAuthority.equals(wallet))throw new Error("The connected wallet is not the active mint authority.");
+ if(state.supply!==10000000000000000000n)throw new Error("Mint supply does not equal the planned initial 100 billion DIGO.");
+ const {metadata,ix}=metadataInstruction(mint);
+ const existing=await connection.getAccountInfo(metadata,"confirmed");
+ if(existing)throw new Error("Metadata account already exists. No transaction is needed.");
+ const latest=await connection.getLatestBlockhash("confirmed");
+ const tx=new Transaction({feePayer:wallet,recentBlockhash:latest.blockhash}).add(ix);
+ const sim=await connection.simulateTransaction(tx,{sigVerify:false,replaceRecentBlockhash:true});
+ if(sim.value.err)throw new Error("Metadata simulation failed: "+JSON.stringify(sim.value.err)+" "+(sim.value.logs||[]).join(" | "));
+ const fee=await connection.getFeeForMessage(tx.compileMessage(),"confirmed");
+ if(fee.value===null)throw new Error("Could not estimate network fee.");
+ const balance=await connection.getBalance(wallet,"confirmed");
+ if(balance<=fee.value)throw new Error("Wallet balance is not sufficient even for the estimated network fee; metadata account rent is also required.");
+ preparedMetadata={mint,metadata,tx,latest,fee:fee.value};
+ metadataDetails.textContent="Mint: "+mint.toBase58()+"\nMetadata PDA: "+metadata.toBase58()+"\nName: DIGO\nSymbol: DIGO\nDecimals verified: 8\nSupply verified: 100,000,000,000 DIGO\nMint authority verified: connected wallet\nMetadata URI: "+METADATA_URI+"\nEstimated network fee: "+(fee.value/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nSimulation: successful. Phantom will show the final transaction and required rent.";
+ metadataStatus.textContent="Mint checks and simulation passed. Nothing has been sent.";
+ approveMetadataBtn.disabled=false;
+}
+prepareMetadataBtn.addEventListener("click",async()=>{prepareMetadataBtn.disabled=true;approveMetadataBtn.disabled=true;metadataStatus.textContent="Checking mint and simulating...";try{await prepareMetadata();}catch(e){metadataStatus.textContent=e.message||String(e);}finally{prepareMetadataBtn.disabled=!wallet;}});
+approveMetadataBtn.addEventListener("click",async()=>{
+ if(!preparedMetadata||!provider)return;
+ approveMetadataBtn.disabled=true;
+ try{
+  if(provider.publicKey?.toString()!==wallet.toBase58())throw new Error("Phantom account changed. Reconnect and prepare again.");
+  metadataStatus.textContent="Review the Metadata transaction and rent in Phantom before approving.";
+  const result=await provider.signAndSendTransaction(preparedMetadata.tx);
+  const signature=result.signature;
+  metadataStatus.textContent="Submitted. Waiting for Mainnet confirmation...";
+  const conf=await connection.confirmTransaction({signature,blockhash:preparedMetadata.latest.blockhash,lastValidBlockHeight:preparedMetadata.latest.lastValidBlockHeight},"confirmed");
+  if(conf.value.err)throw new Error("On-chain transaction failed: "+JSON.stringify(conf.value.err));
+  const check=await connection.getAccountInfo(preparedMetadata.metadata,"confirmed");
+  if(!check||!check.owner.equals(METADATA_PROGRAM_ID))throw new Error("Transaction confirmed but Metadata PDA verification failed. Check Explorer before proceeding.");
+  metadataDetails.textContent+="\nConfirmed signature: "+signature+"\nMetadata PDA verified on Mainnet.\nExplorer: https://explorer.solana.com/tx/"+signature;
+  metadataStatus.textContent="Metadata transaction confirmed and Metadata PDA verified on Mainnet.";
+ }catch(e){metadataStatus.textContent="Not confirmed: "+(e.message||String(e));approveMetadataBtn.disabled=false;}
 });
 </script></body></html>
