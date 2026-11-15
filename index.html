@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101820">
+<meta name="description" content="DIGO — a kind dog. A transparent, community-first Solana project.">
+<title>DIGO — A kind dog</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1218;--panel:#14232c;--line:#29434b;--mint:#49e0b1;--gold:#e8c477;--muted:#a9bdc1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1d4545 0,transparent 55%),var(--bg);color:#f3f8f7;font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{width:min(1080px,92%);margin:auto}.nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-bottom:1px solid #ffffff16}.brand{font-weight:900;letter-spacing:3px;color:var(--mint);font-size:22px}.nav a,.links a{color:var(--muted);text-decoration:none;margin-left:18px}.hero{text-align:center;padding:92px 0 70px}.badge{display:inline-block;border:1px solid #49e0b155;border-radius:30px;padding:5px 14px;color:var(--mint);font-size:13px}.hero h1{font-size:clamp(54px,10vw,94px);line-height:1;margin:25px 0 12px;letter-spacing:5px}.hero p{color:var(--muted);font-size:20px;margin:0 auto 28px}.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.btn{border:1px solid var(--line);border-radius:12px;padding:12px 20px;color:white;text-decoration:none;background:#1a3038}.primary{background:var(--mint);color:#092019;border:0;font-weight:800}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:25px 0 65px}.card{background:linear-gradient(145deg,#172b34,#101c24);border:1px solid var(--line);border-radius:18px;padding:22px}.card h3{margin:0 0 8px;color:var(--mint)}.card p{margin:0;color:var(--muted)}h2{font-size:30px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.stat{padding:18px;border:1px solid var(--line);border-radius:14px}.stat b{display:block;color:var(--gold);font-size:22px}.notice{border-left:3px solid var(--gold);background:#e8c47712;padding:16px 18px;color:#d9d5c7;border-radius:8px;margin:30px 0}footer{border-top:1px solid #ffffff16;padding:28px 0;color:var(--muted);font-size:14px}#walletStatus{margin-top:14px;color:var(--mint);overflow-wrap:anywhere;font-size:13px}
+</style>
+</head>
+<body><div class="wrap">
+<header class="nav"><div class="brand">DIGO</div><div class="links"><a href="#mission">Mission</a><a href="#utility">Utility</a><a href="https://github.com/ehsanatashzaban5-hub/digo-token">GitHub</a></div></header>
+<main>
+<section class="hero"><span class="badge">BUILDING ON SOLANA</span><h1>DIGO</h1><p>A kind dog. A community built on transparency, kindness and real utility.</p><div class="actions"><a class="btn primary" href="#mission">Explore the project</a><button class="btn" id="connect">Connect Phantom</button></div><div id="walletStatus">Wallet is not connected. Connecting never signs a transaction.</div></section>
+<section id="mission"><h2>More than a token</h2><p style="color:var(--muted);max-width:720px">DIGO is being built around practical community tools, transparent reporting and measurable acts of kindness. We publish progress and evidence instead of promises.</p>
+<div class="grid"><article class="card"><h3>Kind Actions</h3><p>Community-led animal welfare and kindness campaigns, with public reports and receipts.</p></article><article class="card"><h3>Community Hub</h3><p>Open proposals, transparent decisions, project updates and treasury reporting.</p></article><article class="card"><h3>Payments</h3><p>A carefully tested Solana Pay pilot for participating creators, merchants and causes.</p></article><article class="card"><h3>Open Analytics</h3><p>Public supply, treasury, liquidity and distribution information after launch.</p></article></div></section>
+<section id="utility"><h2>Token plan</h2><div class="stats"><div class="stat"><b>DIGO</b>Token symbol</div><div class="stat"><b>Solana</b>Network</div><div class="stat"><b>9</b>Decimals planned</div><div class="stat"><b>1B</b>Planned supply</div></div>
+<div class="notice"><strong>Launch status:</strong> The DIGO mainnet token has not yet been created. No mint address, price, liquidity or exchange listing is being claimed. Official on-chain details will appear here only after independent verification.</div></section>
+</main><footer>© DIGO Project · Built in public. No guaranteed returns or exchange listings.</footer>
+</div>
+<script>
+const status=document.getElementById('walletStatus');
+document.getElementById('connect').addEventListener('click',async()=>{
+ const p=window.phantom?.solana;
+ if(!p?.isPhantom){status.textContent="Open this page in Phantom's in-app browser, or install Phantom.";return;}
+ try{const r=await p.connect();status.textContent="Connected public wallet: "+r.publicKey.toString()+". No transaction was requested or signed.";}
+ catch(e){status.textContent="Wallet connection cancelled or unavailable.";}
+});
+</script></body></html>
