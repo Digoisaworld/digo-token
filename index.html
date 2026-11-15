@@ -54,8 +54,19 @@ function setStatus(t){launchStatus.textContent=t;}
 document.getElementById("connect").addEventListener("click",async()=>{
  provider=getProvider();
  if(!provider?.isPhantom){status.textContent="Open this website in Phantom's in-app browser.";return;}
- try{const r=await provider.connect();wallet=new PublicKey(r.publicKey.toString());const a=wallet.toBase58();status.textContent="Connected public wallet: "+a+". No transaction was requested or signed.";walletLabel.textContent=a;prepareBtn.disabled=false;prepareMetadataBtn.disabled=false;setStatus(a===EXPECTED?"Expected wallet connected. Prepare the transaction to inspect exact costs.":"Connected wallet differs from the previously confirmed address. Verify it in Phantom before proceeding.");}
- catch(e){status.textContent="Wallet connection cancelled or unavailable.";setStatus("Connection was cancelled.");}
+ status.textContent="Connecting to Phantom… approve the connection request in the wallet if prompted.";
+ try{
+  const r=await Promise.race([
+   provider.connect(),
+   new Promise((_,reject)=>setTimeout(()=>reject(new Error("Connection timed out after 20 seconds. Close and reopen this page inside Phantom, then try once more.")),20000))
+  ]);
+  if(!r?.publicKey)throw new Error("Phantom did not return a public wallet address.");
+  wallet=new PublicKey(r.publicKey.toString());const a=wallet.toBase58();
+  status.textContent="Connected public wallet: "+a+". No transaction was requested or signed.";
+  walletLabel.textContent=a;prepareBtn.disabled=false;prepareMetadataBtn.disabled=false;
+  setStatus(a===EXPECTED?"Expected wallet connected. Prepare the transaction to inspect exact costs.":"Connected wallet differs from the previously confirmed address. Verify it in Phantom before proceeding.");
+ }
+ catch(e){status.textContent="Phantom connection did not complete: "+(e.message||String(e));setStatus("Wallet is not connected. No transaction was sent.");}
 });
 async function prepare(){
  if(!provider||!wallet)throw new Error("Connect Phantom first.");
