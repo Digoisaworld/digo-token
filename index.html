@@ -52,6 +52,7 @@ async function prepare(){
  const mint=Keypair.generate();
  const ata=await getAssociatedTokenAddress(mint.publicKey,wallet,false,TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID);
  const rent=await getMinimumBalanceForRentExemptMint(connection);
+ const ataRent=await connection.getMinimumBalanceForRentExemption(165,"confirmed");
  const latest=await connection.getLatestBlockhash("confirmed");
  const tx=new Transaction({feePayer:wallet,recentBlockhash:latest.blockhash});
  tx.add(SystemProgram.createAccount({fromPubkey:wallet,newAccountPubkey:mint.publicKey,space:MINT_SIZE,lamports:rent,programId:TOKEN_PROGRAM_ID}));
@@ -64,10 +65,10 @@ async function prepare(){
  const fee=await connection.getFeeForMessage(tx.compileMessage(),"confirmed");
  if(fee.value===null)throw new Error("Could not estimate transaction fee. Try again.");
  const balance=await connection.getBalance(wallet,"confirmed");
- const total=rent+fee.value;
+ const total=rent+ataRent+fee.value;
  if(balance<total)throw new Error("Insufficient SOL. Required at least "+(total/LAMPORTS_PER_SOL).toFixed(6)+" SOL for mint rent and estimated network fee; available "+(balance/LAMPORTS_PER_SOL).toFixed(6)+" SOL.");
- prepared={mint,ata,tx,latest,rent,fee:fee.value,balance};
- details.textContent="Mint address: "+mint.publicKey.toBase58()+"\nRecipient token account: "+ata.toBase58()+"\nMint account rent: "+(rent/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nEstimated network fee: "+(fee.value/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nCurrent wallet balance: "+(balance/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nSimulation: successful.\nTransaction: 4 instructions; create mint, initialize 8 decimals/no freeze authority, create ATA, mint 100B DIGO.";
+ prepared={mint,ata,tx,latest,rent,ataRent,fee:fee.value,balance};
+ details.textContent="Mint address: "+mint.publicKey.toBase58()+"\nRecipient token account: "+ata.toBase58()+"\nMint account rent: "+(rent/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nATA rent (165-byte token account): "+(ataRent/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nEstimated network fee: "+(fee.value/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nTotal estimated required: "+(total/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nCurrent wallet balance: "+(balance/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nSimulation: successful.\nTransaction: 4 instructions; create mint, initialize 8 decimals/no freeze authority, create ATA, mint 100B DIGO.";
  approveBtn.disabled=false;
  setStatus("Simulation succeeded. Review the mint address and costs below. No transaction has been sent.");
 }
