@@ -8,7 +8,7 @@
 <style>
 :root{color-scheme:dark;--bg:#0b1218;--panel:#14232c;--line:#29434b;--mint:#49e0b1;--gold:#e8c477;--muted:#a9bdc1}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1d4545 0,transparent 55%),var(--bg);color:#f3f8f7;font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
-.wrap{width:min(1080px,92%);margin:auto}.nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-bottom:1px solid #ffffff16}.brand{font-weight:900;letter-spacing:3px;color:var(--mint);font-size:22px}.nav a,.links a{color:var(--muted);text-decoration:none;margin-left:18px}.hero{text-align:center;padding:92px 0 70px}.badge{display:inline-block;border:1px solid #49e0b155;border-radius:30px;padding:5px 14px;color:var(--mint);font-size:13px}.hero h1{font-size:clamp(54px,10vw,94px);line-height:1;margin:25px 0 12px;letter-spacing:5px}.hero p{color:var(--muted);font-size:20px;margin:0 auto 28px}.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.btn{border:1px solid var(--line);border-radius:12px;padding:12px 20px;color:white;text-decoration:none;background:#1a3038}.primary{background:var(--mint);color:#092019;border:0;font-weight:800}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:25px 0 65px}.card{background:linear-gradient(145deg,#172b34,#101c24);border:1px solid var(--line);border-radius:18px;padding:22px}.card h3{margin:0 0 8px;color:var(--mint)}.card p{margin:0;color:var(--muted)}h2{font-size:30px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.stat{padding:18px;border:1px solid var(--line);border-radius:14px}.stat b{display:block;color:var(--gold);font-size:22px}.notice{border-left:3px solid var(--gold);background:#e8c47712;padding:16px 18px;color:#d9d5c7;border-radius:8px;margin:30px 0}footer{border-top:1px solid #ffffff16;padding:28px 0;color:var(--muted);font-size:14px}#walletStatus{margin-top:14px;color:var(--mint);overflow-wrap:anywhere;font-size:13px}
+.wrap{width:min(1080px,92%);margin:auto}.nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-bottom:1px solid #ffffff16}.brand{font-weight:900;letter-spacing:3px;color:var(--mint);font-size:22px}.nav a,.links a{color:var(--muted);text-decoration:none;margin-left:18px}.hero{text-align:center;padding:82px 0 55px}.badge{display:inline-block;border:1px solid #49e0b155;border-radius:30px;padding:5px 14px;color:var(--mint);font-size:13px}.hero h1{font-size:clamp(54px,10vw,94px);line-height:1;margin:25px 0 12px;letter-spacing:5px}.hero p{color:var(--muted);font-size:20px;margin:0 auto 28px}.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.btn{border:1px solid var(--line);border-radius:12px;padding:12px 20px;color:white;text-decoration:none;background:#1a3038;cursor:pointer;font:inherit}.primary{background:var(--mint);color:#092019;border:0;font-weight:800}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:25px 0 65px}.card{background:linear-gradient(145deg,#172b34,#101c24);border:1px solid var(--line);border-radius:18px;padding:22px}.card h3{margin:0 0 8px;color:var(--mint)}.card p{margin:0;color:var(--muted)}h2{font-size:30px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.stat{padding:18px;border:1px solid var(--line);border-radius:14px}.stat b{display:block;color:var(--gold);font-size:22px}.notice{border-left:3px solid var(--gold);background:#e8c47712;padding:16px 18px;color:#d9d5c7;border-radius:8px;margin:30px 0}footer{border-top:1px solid #ffffff16;padding:28px 0;color:var(--muted);font-size:14px}#walletStatus,#launchStatus{margin-top:14px;color:var(--mint);overflow-wrap:anywhere;font-size:13px}.launch{background:linear-gradient(145deg,#172b34,#101c24);border:1px solid var(--line);border-radius:18px;padding:24px;margin:40px 0 65px}.launch p,.small{color:var(--muted)}.launch button{margin:8px 8px 0 0}.danger{color:#ffd5c8;background:#542b2b;border:1px solid #9a5555}.mono{overflow-wrap:anywhere;font-family:ui-monospace,monospace;font-size:13px}.hidden{display:none}button:disabled{opacity:.5;cursor:not-allowed}
 </style>
 </head>
 <body><div class="wrap">
@@ -19,14 +19,73 @@
 <div class="grid"><article class="card"><h3>AI Agent Hub</h3><p>A discoverable directory of AI agents, tools, service profiles and reputation signals.</p></article><article class="card"><h3>AI API Marketplace</h3><p>Explore metered access to participating model, data and automation APIs.</p></article><article class="card"><h3>Agent Payments</h3><p>Prototype settlement between AI agents and digital-service providers.</p></article><article class="card"><h3>Developer Tools</h3><p>SDKs, integrations and transparent usage metrics for the ecosystem.</p></article></div></section>
 <section id="utility"><h2>Token plan</h2><div class="stats"><div class="stat"><b>DIGO</b>Token symbol</div><div class="stat"><b>Solana</b>Network</div><div class="stat"><b>8</b>Decimals planned</div><div class="stat"><b>100B</b>Initial mint target</div></div>
 <div class="notice"><strong>Launch status:</strong> The DIGO mainnet token has not yet been created. No mint address, price, liquidity, live AI service or exchange listing is being claimed. The planned initial mint is 100 billion DIGO; because mint authority is intended to remain active, this is not a permanent maximum supply.</div></section>
+<section class="launch" id="launch"><h2>Prepare DIGO Mainnet mint</h2>
+<p>This tool prepares one transaction containing mint-account creation, SPL Token initialization, your associated token account creation and the initial mint of 100 billion DIGO. It does not send anything until you separately approve the final action in Phantom.</p>
+<p><strong>Wallet:</strong> <span id="launchWallet" class="mono">Not connected</span><br><strong>Network:</strong> Solana Mainnet Beta<br><strong>Token program:</strong> Original SPL Token<br><strong>Decimals:</strong> 8<br><strong>Initial supply:</strong> 100,000,000,000 DIGO<br><strong>Mint authority:</strong> Your connected Phantom wallet<br><strong>Freeze authority:</strong> None</p>
+<div class="notice"><strong>Important:</strong> Mint authority will remain active, so total supply is not permanently capped. The mint keypair is generated in this browser session. Save the mint address shown after preparation; do not clear this page before the transaction is completed.</div>
+<div class="actions" style="justify-content:flex-start"><button class="btn" id="prepare" disabled>1. Prepare and simulate transaction</button><button class="btn primary" id="approve" disabled>2. Review and approve in Phantom</button></div>
+<div id="launchStatus" aria-live="polite">Connect the intended Phantom wallet to begin. No seed phrase or private key is needed.</div>
+<div id="txDetails" class="small mono"></div>
+</section>
 </main><footer>© DIGO Project · Built in public. No guaranteed returns or exchange listings.</footer>
 </div>
-<script>
-const status=document.getElementById('walletStatus');
-document.getElementById('connect').addEventListener('click',async()=>{
- const p=window.phantom?.solana;
- if(!p?.isPhantom){status.textContent="Open this page in Phantom's in-app browser, or install Phantom.";return;}
- try{const r=await p.connect();status.textContent="Connected public wallet: "+r.publicKey.toString()+". No transaction was requested or signed.";}
- catch(e){status.textContent="Wallet connection cancelled or unavailable.";}
+<script type="module">
+import {Connection,PublicKey,Keypair,SystemProgram,Transaction,LAMPORTS_PER_SOL} from "https://esm.sh/@solana/web3.js@1.98.4";
+import {TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID, MINT_SIZE, getMinimumBalanceForRentExemptMint, createInitializeMintInstruction, getAssociatedTokenAddress, createAssociatedTokenAccountInstruction, createMintToInstruction} from "https://esm.sh/@solana/spl-token@0.4.13?external=@solana/web3.js";
+const EXPECTED="HK7Fh86hwAQwjqmLrm8L1JLVS57Eo7jD2FfzaHdhmZbQ";
+const RPC="https://api.mainnet-beta.solana.com";
+const connection=new Connection(RPC,"confirmed");
+const status=document.getElementById("walletStatus"), launchStatus=document.getElementById("launchStatus");
+const walletLabel=document.getElementById("launchWallet"), prepareBtn=document.getElementById("prepare"), approveBtn=document.getElementById("approve"), details=document.getElementById("txDetails");
+let provider=null, wallet=null, prepared=null;
+function getProvider(){return window.phantom?.solana ?? window.solana ?? null;}
+function setStatus(t){launchStatus.textContent=t;}
+document.getElementById("connect").addEventListener("click",async()=>{
+ provider=getProvider();
+ if(!provider?.isPhantom){status.textContent="Open this website in Phantom's in-app browser.";return;}
+ try{const r=await provider.connect();wallet=new PublicKey(r.publicKey.toString());const a=wallet.toBase58();status.textContent="Connected public wallet: "+a+". No transaction was requested or signed.";walletLabel.textContent=a;prepareBtn.disabled=false;setStatus(a===EXPECTED?"Expected wallet connected. Prepare the transaction to inspect exact costs.":"Connected wallet differs from the previously confirmed address. Verify it in Phantom before proceeding.");}
+ catch(e){status.textContent="Wallet connection cancelled or unavailable.";setStatus("Connection was cancelled.");}
+});
+async function prepare(){
+ if(!provider||!wallet)throw new Error("Connect Phantom first.");
+ if(wallet.toBase58()!==EXPECTED)throw new Error("Connected wallet does not match the previously confirmed recipient address. Disconnect and select the correct Phantom account.");
+ const mint=Keypair.generate();
+ const ata=await getAssociatedTokenAddress(mint.publicKey,wallet,false,TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID);
+ const rent=await getMinimumBalanceForRentExemptMint(connection);
+ const latest=await connection.getLatestBlockhash("confirmed");
+ const tx=new Transaction({feePayer:wallet,recentBlockhash:latest.blockhash});
+ tx.add(SystemProgram.createAccount({fromPubkey:wallet,newAccountPubkey:mint.publicKey,space:MINT_SIZE,lamports:rent,programId:TOKEN_PROGRAM_ID}));
+ tx.add(createInitializeMintInstruction(mint.publicKey,8,wallet,null,TOKEN_PROGRAM_ID));
+ tx.add(createAssociatedTokenAccountInstruction(wallet,ata,wallet,mint.publicKey,TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID));
+ tx.add(createMintToInstruction(mint.publicKey,ata,wallet,10000000000000000000n,[],TOKEN_PROGRAM_ID));
+ tx.partialSign(mint);
+ const sim=await connection.simulateTransaction(tx,{sigVerify:false,replaceRecentBlockhash:true});
+ if(sim.value.err)throw new Error("Simulation failed: "+JSON.stringify(sim.value.err)+" "+(sim.value.logs||[]).join(" | "));
+ const fee=await connection.getFeeForMessage(tx.compileMessage(),"confirmed");
+ if(fee.value===null)throw new Error("Could not estimate transaction fee. Try again.");
+ const balance=await connection.getBalance(wallet,"confirmed");
+ const total=rent+fee.value;
+ if(balance<total)throw new Error("Insufficient SOL. Required at least "+(total/LAMPORTS_PER_SOL).toFixed(6)+" SOL for mint rent and estimated network fee; available "+(balance/LAMPORTS_PER_SOL).toFixed(6)+" SOL.");
+ prepared={mint,ata,tx,latest,rent,fee:fee.value,balance};
+ details.textContent="Mint address: "+mint.publicKey.toBase58()+"\nRecipient token account: "+ata.toBase58()+"\nMint account rent: "+(rent/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nEstimated network fee: "+(fee.value/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nCurrent wallet balance: "+(balance/LAMPORTS_PER_SOL).toFixed(6)+" SOL\nSimulation: successful.\nTransaction: 4 instructions; create mint, initialize 8 decimals/no freeze authority, create ATA, mint 100B DIGO.";
+ approveBtn.disabled=false;
+ setStatus("Simulation succeeded. Review the mint address and costs below. No transaction has been sent.");
+}
+prepareBtn.addEventListener("click",async()=>{prepareBtn.disabled=true;approveBtn.disabled=true;details.textContent="Preparing and simulating on Mainnet...";try{await prepare();}catch(e){setStatus(e.message||String(e));}finally{prepareBtn.disabled=!wallet; }});
+approveBtn.addEventListener("click",async()=>{
+ if(!prepared||!provider) return;
+ approveBtn.disabled=true;
+ try{
+  const current=provider.publicKey?.toString();
+  if(current!==wallet.toBase58())throw new Error("Phantom account changed. Reconnect and prepare again.");
+  setStatus("Phantom will now show the transaction for your independent review. Approve only if all displayed details match.");
+  const result=await provider.signAndSendTransaction(prepared.tx);
+  const signature=result.signature;
+  setStatus("Transaction submitted. Waiting for Mainnet confirmation...");
+  const conf=await connection.confirmTransaction({signature,blockhash:prepared.latest.blockhash,lastValidBlockHeight:prepared.latest.lastValidBlockHeight},"confirmed");
+  if(conf.value.err)throw new Error("Transaction failed on chain: "+JSON.stringify(conf.value.err));
+  details.textContent+="\nTransaction signature: "+signature+"\nMint address: "+prepared.mint.publicKey.toBase58()+"\nExplorer: https://explorer.solana.com/tx/"+signature;
+  setStatus("Mainnet transaction confirmed. Independently verify mint supply, decimals, authorities and ATA on Solana Explorer before announcing DIGO.");
+ }catch(e){setStatus("Not confirmed: "+(e.message||String(e))+". If Phantom rejected it, no token was created.");approveBtn.disabled=false;}
 });
 </script></body></html>
