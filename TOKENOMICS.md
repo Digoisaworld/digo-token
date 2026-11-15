@@ -1,30 +1,32 @@
-# DIGO Tokenomics — Draft
+# DIGO Tokenomics — Draft (not yet deployed)
 
 ## Proposed parameters
 - Name: DIGO
 - Ticker: DIGO
 - Chain: Solana Mainnet
-- Token standard: original SPL Token with Metaplex Token Metadata
+- Token standard: original SPL Token + Metaplex Token Metadata
 - Decimals: 9
-- Planned supply: 1,000,000,000 DIGO
+- Initial planned mint: 1,000,000,000 DIGO
 
-## Allocation policy
-No allocation percentages are being represented as final. Before mainnet minting, publish an allocation table that totals exactly 100%, with:
-- community/ecosystem distribution,
-- liquidity,
-- treasury,
-- contributors/team (with public vesting),
-- grants/charity campaigns (with evidence and controls).
+## Authority policy — reflects the founder's current preference
+- Mint authority: **intended to remain active** so additional tokens can be minted later.
+- Freeze authority: **intended to be revoked**.
+- This is not a fixed-supply token while mint authority remains active. The one-billion figure describes the planned initial mint, not a permanent maximum.
+- Before mainnet creation, publish who controls mint authority, the custody method, the conditions for any future mint, advance notice, community approval process and public disclosure requirements.
+- Stronger trust option: place mint authority under a properly configured multisig with independent signers and a published issuance policy. A multisig does not itself impose a supply cap; the policy and controls must be explicit.
 
-Every allocation must identify its controlling wallet or vesting mechanism. Avoid large unlocked insider allocations.
+## Allocation policy — not finalized
+Do not mint until the founder approves a table totaling exactly 100%, with wallet/control and vesting details for each allocation. Suggested categories:
+- Community and ecosystem
+- Liquidity
+- Treasury and operations
+- Contributors/team (with public vesting)
+- Kind Actions grants (with eligibility, evidence and reporting)
 
-## Authority policy — decision required before launch
-The earlier concept was to retain mint authority for future minting. That conflicts with a hard fixed supply and can reduce holder/exchange confidence. Recommended safer default: mint the full authorized supply once, then revoke mint authority; revoke freeze authority; publish transaction signatures.
-
-If future issuance is genuinely required, do not use an undisclosed personal wallet. Define a capped issuance policy, multisig governance, public proposal/notice period and transparent on-chain records before launch. This means supply is not fixed and must be disclosed clearly.
+Avoid large unlocked insider allocations. Do not describe tokens held in treasury or vesting as circulating.
 
 ## Circulating supply
-Do not call the full minted supply circulating if tokens are locked, vested, held in treasury or otherwise unavailable. Publish the calculation method and update it consistently.
+Publish the calculation method and distinguish initial minted supply, circulating supply, locked/vesting balances, treasury balances and any later minting.
 
 ## No promises
 DIGO does not promise price appreciation, profits, yield, buybacks or exchange listings. Utility and adoption must be demonstrated, not asserted.
