@@ -18,10 +18,10 @@
 <div id="runtimeDiagnostic" role="status" aria-live="polite" style="margin:10px auto 0;max-width:760px;padding:10px 14px;border:1px solid #29434b;border-radius:10px;color:#e8c477;font-size:12px;overflow-wrap:anywhere">Diagnostics ready. Tap Connect Phantom to inspect this browser.</div></section>
 <section id="mission"><h2>More than a token</h2><p style="color:var(--muted);max-width:720px">DIGO is exploring practical infrastructure for AI agents, developers and digital services. Solana can provide settlement and verifiable coordination while AI inference and compute run off-chain.</p>
 <div class="grid"><article class="card"><h3>AI Agent Hub</h3><p>A discoverable directory of AI agents, tools, service profiles and reputation signals.</p></article><article class="card"><h3>AI API Marketplace</h3><p>Explore metered access to participating model, data and automation APIs.</p></article><article class="card"><h3>Agent Payments</h3><p>Prototype settlement between AI agents and digital-service providers.</p></article><article class="card"><h3>Developer Tools</h3><p>SDKs, integrations and transparent usage metrics for the ecosystem.</p></article></div></section>
-<section id="utility"><h2>Token plan</h2><div class="stats"><div class="stat"><b>DIGO</b>Token symbol</div><div class="stat"><b>Solana</b>Network</div><div class="stat"><b>8</b>Decimals planned</div><div class="stat"><b>100B</b>Initial mint target</div></div>
-<div class="notice"><strong>Launch status:</strong> The DIGO mainnet token has not yet been created. No mint address, price, liquidity, live AI service or exchange listing is being claimed. The planned initial mint is 100 billion DIGO; because mint authority is intended to remain active, this is not a permanent maximum supply.</div></section>
+<section id="utility"><h2>Token plan</h2><div class="stats"><div class="stat"><b>DIGO</b>Token symbol</div><div class="stat"><b>Solana</b>Network</div><div class="stat"><b>8</b>Decimals</div><div class="stat"><b>100B</b>Initial supply minted</div></div>
+<div class="notice"><strong>Mainnet launch:</strong> The DIGO SPL token has been created and its initial supply of 100 billion DIGO is confirmed on Solana Mainnet Beta. Mint authority remains active, so 100 billion is the initial supply, not a permanent maximum. No price, liquidity, live AI service or exchange listing is being claimed.<br><span class="mono">Mint: 7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F</span></div></section>
 <section class="launch" id="metadata"><h2>Register DIGO metadata</h2>
-<p>This is a separate step for an already-created SPL Mint. It registers the token name, symbol and logo URI with the Metaplex Token Metadata program. It cannot create a mint and it will not run automatically.</p>
+<p>The DIGO SPL mint already exists on Solana Mainnet. This separate step registers its name, symbol and logo URI with the Metaplex Token Metadata program. It does not create or mint tokens.</p>
 <p><strong>Required:</strong> an existing Mainnet SPL mint with 8 decimals, initial supply of 100 billion DIGO, and mint authority still controlled by the connected Phantom wallet.</p>
 <label for="metadataMint">Existing DIGO Mint address</label><br><input id="metadataMint" class="btn mono" style="width:min(100%,620px);text-align:left" placeholder="Paste the confirmed Mainnet mint address" autocomplete="off">
 <div class="actions" style="justify-content:flex-start"><button class="btn" id="prepareMetadata" disabled>1. Verify mint and simulate metadata</button><button class="btn primary" id="approveMetadata" disabled>2. Review and approve in Phantom</button></div>
@@ -31,7 +31,7 @@
 <section class="launch" id="launch"><h2>Prepare DIGO Mainnet mint</h2>
 <p>This tool prepares one transaction containing mint-account creation, SPL Token initialization, your associated token account creation and the initial mint of 100 billion DIGO. It does not send anything until you separately approve the final action in Phantom.</p>
 <p><strong>Wallet:</strong> <span id="launchWallet" class="mono">Not connected</span><br><strong>Network:</strong> Solana Mainnet Beta<br><strong>Token program:</strong> Original SPL Token<br><strong>Decimals:</strong> 8<br><strong>Initial supply:</strong> 100,000,000,000 DIGO<br><strong>Mint authority:</strong> Your connected Phantom wallet<br><strong>Freeze authority:</strong> None</p>
-<div class="notice"><strong>Important:</strong> Mint authority will remain active, so total supply is not permanently capped. The mint keypair is generated in this browser session. Save the mint address shown after preparation; do not clear this page before the transaction is completed.</div>
+<div class="notice"><strong>Important:</strong> Mint authority will remain active, so total supply is not permanently capped. The DIGO Mainnet mint has already been created. Use the existing mint address in the Metadata section above; do not prepare another mint.</div>
 <div class="actions" style="justify-content:flex-start"><button class="btn" id="prepare" disabled>1. Prepare and simulate transaction</button><button class="btn primary" id="approve" disabled>2. Review and approve in Phantom</button></div>
 <div id="launchStatus" aria-live="polite">Connect the intended Phantom wallet to begin. No seed phrase or private key is needed.</div>
 <div id="txDetails" class="small mono"></div>
@@ -257,11 +257,22 @@ approveMetadataBtn.addEventListener("click",async()=>{
  approveMetadataBtn.disabled=true;
  try{
   if(provider.publicKey?.toString()!==wallet.toBase58())throw new Error("Phantom account changed. Reconnect and prepare again.");
-  metadataStatus.textContent="Review the Metadata transaction and rent in Phantom before approving.";
+  metadataStatus.textContent="Refreshing blockhash, re-simulating and checking the wallet balance...";
+  const latest=await connection.getLatestBlockhash("confirmed");
+  preparedMetadata.tx.recentBlockhash=latest.blockhash;
+  const freshSim=await simulateLegacyTransaction(preparedMetadata.tx);
+  if(freshSim.value.err)throw new Error("Fresh metadata simulation failed: "+JSON.stringify(freshSim.value.err)+" "+(freshSim.value.logs||[]).join(" | "));
+  const freshFee=await connection.getFeeForMessage(preparedMetadata.tx.compileMessage(),"confirmed");
+  if(freshFee.value===null)throw new Error("Could not estimate the fresh network fee.");
+  const freshBalance=await connection.getBalance(wallet,"confirmed");
+  const rentRequired=await connection.getMinimumBalanceForRentExemption(679,"confirmed");
+  if(freshBalance<freshFee.value+rentRequired)throw new Error("Insufficient SOL for metadata rent and network fee. Required at least "+((freshFee.value+rentRequired)/LAMPORTS_PER_SOL).toFixed(6)+" SOL; available "+(freshBalance/LAMPORTS_PER_SOL).toFixed(6)+" SOL.");
+  preparedMetadata.latest=latest;
+  metadataStatus.textContent="Fresh simulation passed. Review the metadata instruction and rent in Phantom; approve only if correct.";
   const result=await provider.signAndSendTransaction(preparedMetadata.tx);
   const signature=result.signature;
   metadataStatus.textContent="Submitted. Waiting for Mainnet confirmation...";
-  const conf=await connection.confirmTransaction({signature,blockhash:preparedMetadata.latest.blockhash,lastValidBlockHeight:preparedMetadata.latest.lastValidBlockHeight},"confirmed");
+  const conf=await connection.confirmTransaction({signature,blockhash:latest.blockhash,lastValidBlockHeight:latest.lastValidBlockHeight},"confirmed");
   if(conf.value.err)throw new Error("On-chain transaction failed: "+JSON.stringify(conf.value.err));
   const check=await connection.getAccountInfo(preparedMetadata.metadata,"confirmed");
   if(!check||!check.owner.equals(METADATA_PROGRAM_ID))throw new Error("Transaction confirmed but Metadata PDA verification failed. Check Explorer before proceeding.");
