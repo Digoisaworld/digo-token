@@ -1,30 +1,36 @@
-# Mainnet Launch Checklist — Do not skip
+# Mainnet Launch Checklist — DIGO
 
-Do not sign a mainnet transaction until every required decision is approved and the transaction is simulated and reviewed.
+**Status: NOT DEPLOYED. Do not treat this checklist as evidence of a live token.**
 
-## Founder decisions
-- [ ] Confirm exact token name and symbol
-- [ ] Confirm original SPL Token vs Token-2022 after checking target wallet/exchange compatibility
-- [ ] Confirm **8 decimals** and initial mint amount of **100,000,000,000 DIGO**. SPL Token's u64 base-unit supply field cannot represent 100 billion whole tokens at 9 decimals.
-- [ ] Confirm mint authority retention, custody and issuance policy
-- [ ] Confirm freeze authority revocation
-- [ ] Approve final allocation table totaling 100%
-- [ ] Approve logo and public metadata
-- [ ] Approve treasury and liquidity custody plan
+## Approved working parameters
+- Name: DIGO
+- Symbol: DIGO
+- Network: Solana Mainnet
+- Token program: Original SPL Token (proposed; compatibility check still required)
+- Decimals: 8
+- Initial mint target: 100,000,000,000 DIGO
+- Recipient wallet supplied by founder: `HK7Fh86hwAQwjqmLrm8L1JLVS57Eo7jD2FfzaHdhmZbQ`
+- Mint authority: intended to remain active
+- Freeze authority: intended to be absent
 
-## Before signing
-- [ ] Publish metadata JSON and logo on durable public storage
-- [ ] Verify metadata URI and image
-- [ ] Inspect every instruction, account, authority and fee
-- [ ] Simulate on intended cluster
-- [ ] Confirm wallet and cluster are Solana Mainnet
-- [ ] Confirm enough SOL for rent and fees
-- [ ] Never put seed phrases or private keys in the browser, terminal, repository or chat
+The SPL mint supply field is a u64 base-unit integer. 100 billion whole tokens at 9 decimals would require 10^20 base units, above u64 max; 8 decimals requires 10^19 and fits. Confirm decimals and amount in every transaction preview.
 
-## After creation
-- [ ] Verify mint, decimals, supply and authorities using independent RPC/explorer
-- [ ] Verify metadata account and image rendering
-- [ ] Publish transaction signatures and explorer links
-- [ ] Publish allocation wallets and vesting evidence
-- [ ] Update website, README and exchange dossier
-- [ ] Do not claim listing or liquidity until it actually exists
+## Still required before any Mainnet signature
+- [ ] Publish the final logo at `assets/digo-logo.jpg` and verify the public image URL.
+- [ ] Publish `metadata/token.json` and verify its JSON and image URL. The current metadata file references the logo path, which is not yet present.
+- [ ] Confirm the recipient address in Phantom. The supplied public address has not been cryptographically proven to belong to the founder.
+- [ ] Check payer balance and obtain live rent/fee estimates immediately before signing.
+- [ ] Review the token program ID, all instruction accounts, authorities and exact amounts.
+- [ ] Simulate the exact transaction on Devnet first.
+- [ ] Review every Mainnet transaction in Phantom; never sign an unknown or opaque transaction.
+- [ ] Create the mint with mint authority set to the intended owner-controlled wallet and freeze authority set to none.
+- [ ] Create the recipient associated token account.
+- [ ] Mint exactly 100,000,000,000 DIGO (base units: 10,000,000,000,000,000,000).
+- [ ] Independently verify supply, decimals, authorities, recipient ATA and balance on Mainnet.
+- [ ] Publish mint address and transaction signatures only after verification.
+
+## Important controls
+- Keeping mint authority active means supply is not permanently capped. Publish issuance rules, custody and every mint event.
+- Never share a seed phrase, private key or wallet export. No project website or assistant should request them.
+- Never send SOL to an address supplied by an untrusted guide or embedded playground wallet.
+- Do not claim the token is live, listed, liquid or tradable until independently verified.
