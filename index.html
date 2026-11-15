@@ -62,6 +62,22 @@
 })();
 </script>
 <script type="module">
+(async()=>{
+ const box=document.getElementById("runtimeDiagnostic");
+ const tests=[
+  ["buffer","https://esm.sh/buffer@6.0.3"],
+  ["web3.js","https://esm.sh/@solana/web3.js@1.98.4"],
+  ["spl-token","https://esm.sh/@solana/spl-token@0.4.13?external=@solana/web3.js"]
+ ];
+ const results=await Promise.all(tests.map(async([name,url])=>{
+  try{await import(url);return name+": OK";}
+  catch(e){return name+": FAILED — "+(e?.message||String(e))+" ["+url+"]";}
+ }));
+ window.__DIGO_IMPORT_DIAGNOSTICS__=results;
+ box.textContent="Dependency diagnostics: "+results.join(" | ")+" | online: "+navigator.onLine+" | page: "+location.href;
+})();
+</script>
+<script type="module">
 import {Buffer} from "https://esm.sh/buffer@6.0.3";
 import {Connection,PublicKey,Keypair,SystemProgram,Transaction,TransactionInstruction,LAMPORTS_PER_SOL} from "https://esm.sh/@solana/web3.js@1.98.4";
 import {TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID, MINT_SIZE, getMinimumBalanceForRentExemptMint, createInitializeMintInstruction, getAssociatedTokenAddress, createAssociatedTokenAccountInstruction, createMintToInstruction, getMint} from "https://esm.sh/@solana/spl-token@0.4.13?external=@solana/web3.js";
