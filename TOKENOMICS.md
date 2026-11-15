@@ -1,32 +1,40 @@
 # DIGO Tokenomics — Draft (not yet deployed)
 
-## Proposed parameters
+## Proposed token parameters
 - Name: DIGO
-- Ticker: DIGO
-- Chain: Solana Mainnet
-- Token standard: original SPL Token + Metaplex Token Metadata
+- Symbol: DIGO
+- Network: Solana Mainnet
+- Token standard: Original SPL Token is the current proposal; compatibility review is required before launch.
 - Decimals: 9
-- Initial planned mint: 1,000,000,000 DIGO
+- Initial mint target: **100,000,000,000 DIGO (100 billion)**
 
-## Authority policy — reflects the founder's current preference
-- Mint authority: **intended to remain active** so additional tokens can be minted later.
+## Supply and authority policy
+- Mint authority: **intended to remain active**, as requested by the founder, to allow future issuance.
 - Freeze authority: **intended to be revoked**.
-- This is not a fixed-supply token while mint authority remains active. The one-billion figure describes the planned initial mint, not a permanent maximum.
-- Before mainnet creation, publish who controls mint authority, the custody method, the conditions for any future mint, advance notice, community approval process and public disclosure requirements.
-- Stronger trust option: place mint authority under a properly configured multisig with independent signers and a published issuance policy. A multisig does not itself impose a supply cap; the policy and controls must be explicit.
+- Because mint authority remains active, 100 billion is the planned initial mint, **not a permanent maximum supply**. Future issuance can increase total supply.
+- Before launch, publish the authority address, custody method, issuance conditions, advance notice period, approval process and a public minting log.
+- A multisig with independent signers is recommended for mint authority. A multisig improves control but does not create a hard supply cap.
 
 ## Allocation policy — not finalized
-Do not mint until the founder approves a table totaling exactly 100%, with wallet/control and vesting details for each allocation. Suggested categories:
-- Community and ecosystem
+Do not mint until an allocation table totals exactly 100% and identifies wallet control, vesting and unlock conditions. Potential categories should be tied to actual project needs, for example:
+- Ecosystem and developer incentives
+- AI infrastructure / compute ecosystem
 - Liquidity
 - Treasury and operations
-- Contributors/team (with public vesting)
-- Kind Actions grants (with eligibility, evidence and reporting)
+- Core contributors (with public vesting)
 
-Avoid large unlocked insider allocations. Do not describe tokens held in treasury or vesting as circulating.
+No allocation percentages are approved yet. Avoid large unlocked insider allocations and disclose all related-party wallets.
 
-## Circulating supply
-Publish the calculation method and distinguish initial minted supply, circulating supply, locked/vesting balances, treasury balances and any later minting.
+## Intended technology utility (proposed, not live)
+DIGO is being repositioned around AI and technology. Possible token uses, subject to product, legal and security validation:
+- Payments for AI-agent services and API calls.
+- Access credits for participating AI tools, inference and compute providers.
+- Settlement between AI agents and service providers.
+- Developer ecosystem grants and transparent protocol governance.
+These are product hypotheses, not existing services or guaranteed token demand. Do not describe them as live until independently testable.
 
-## No promises
-DIGO does not promise price appreciation, profits, yield, buybacks or exchange listings. Utility and adoption must be demonstrated, not asserted.
+## Supply reporting
+Publish initial minted supply, circulating supply methodology, locked/vesting balances, treasury balances, holder concentration and every subsequent mint or burn.
+
+## Risk disclosures
+No promise of price appreciation, profits, yield, buybacks, liquidity or exchange listings. Active mint authority creates dilution risk. Utility, adoption and exchange eligibility must be demonstrated.
