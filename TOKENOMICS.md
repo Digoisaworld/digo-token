@@ -5,7 +5,7 @@
 - Symbol: DIGO
 - Network: Solana Mainnet
 - Token standard: Original SPL Token is the current proposal; compatibility review is required before launch.
-- Decimals: 9
+- Decimals: **8** (required for a 100 billion whole-token initial mint under the SPL Token u64 supply limit)
 - Initial mint target: **100,000,000,000 DIGO (100 billion)**
 
 ## Supply and authority policy
