@@ -180,11 +180,25 @@ approveBtn.addEventListener("click",async()=>{
  try{
   const current=provider.publicKey?.toString();
   if(current!==wallet.toBase58())throw new Error("Phantom account changed. Reconnect and prepare again.");
-  setStatus("Phantom will now show the transaction for your independent review. Approve only if all displayed details match.");
+  setStatus("Refreshing blockhash and re-simulating immediately before Phantom approval...");
+  const latest=await connection.getLatestBlockhash("confirmed");
+  prepared.tx.recentBlockhash=latest.blockhash;
+  prepared.tx.partialSign(prepared.mint);
+  const freshSim=await simulateLegacyTransaction(prepared.tx);
+  if(freshSim.value.err)throw new Error("Fresh simulation failed: "+JSON.stringify(freshSim.value.err)+" "+(freshSim.value.logs||[]).join(" | "));
+  const freshFee=await connection.getFeeForMessage(prepared.tx.compileMessage(),"confirmed");
+  if(freshFee.value===null)throw new Error("Could not estimate fresh transaction fee.");
+  const freshBalance=await connection.getBalance(wallet,"confirmed");
+  const required=prepared.rent+prepared.ataRent+freshFee.value;
+  if(freshBalance<required)throw new Error("Insufficient SOL at approval time. Required "+(required/LAMPORTS_PER_SOL).toFixed(6)+" SOL; available "+(freshBalance/LAMPORTS_PER_SOL).toFixed(6)+" SOL.");
+  prepared.latest=latest;
+  prepared.fee=freshFee.value;
+  prepared.balance=freshBalance;
+  setStatus("Fresh simulation succeeded. Review the transaction in Phantom and approve only if its details match.");
   const result=await provider.signAndSendTransaction(prepared.tx);
   const signature=result.signature;
   setStatus("Transaction submitted. Waiting for Mainnet confirmation...");
-  const conf=await connection.confirmTransaction({signature,blockhash:prepared.latest.blockhash,lastValidBlockHeight:prepared.latest.lastValidBlockHeight},"confirmed");
+  const conf=await connection.confirmTransaction({signature,blockhash:latest.blockhash,lastValidBlockHeight:latest.lastValidBlockHeight},"confirmed");
   if(conf.value.err)throw new Error("Transaction failed on chain: "+JSON.stringify(conf.value.err));
   details.textContent+="\nTransaction signature: "+signature+"\nMint address: "+prepared.mint.publicKey.toBase58()+"\nExplorer: https://explorer.solana.com/tx/"+signature;
   setStatus("Mainnet transaction confirmed. Independently verify mint supply, decimals, authorities and ATA on Solana Explorer before announcing DIGO.");
