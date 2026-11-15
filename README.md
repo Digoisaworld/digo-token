@@ -6,8 +6,8 @@
 
 - [x] Public project repository created
 - [x] Initial project charter and draft tokenomics documented
-- [x] DIGO mascot artwork received
-- [ ] Final logo asset and public metadata hosted
+- [x] DIGO logo asset published
+- [x] Public project website deployed on GitHub Pages
 - [ ] Mainnet mint created and independently verified
 - [ ] Allocation, vesting and authority policy finalized
 - [ ] AI utility prototype shipped on testnet
@@ -27,7 +27,7 @@
 | Decimals | **8** |
 | Initial mint target | **100,000,000,000 DIGO** |
 | Mint authority | Remains active by founder preference; custody and issuance policy pending |
-| Freeze authority | Revoke |
+| Freeze authority | None at mint initialization |
 
 The 100 billion figure is the planned initial mint, not a permanent maximum, because the mint authority is intended to remain active. Future issuance can dilute holders and must be disclosed.
 
@@ -50,8 +50,9 @@ These are roadmap concepts, not live products or guaranteed sources of token dem
 - A listing is always the exchange's independent decision; no feature can guarantee it.
 
 ## Links
-- Website: GitHub Pages deployment pending verification
+- Website: https://ehsanatashzaban5-hub.github.io/digo-token/
+- Repository: https://github.com/ehsanatashzaban5-hub/digo-token
 - Solana mint: not created yet
 - Community channels: to be published
 
-See [TOKENOMICS.md](TOKENOMICS.md), [LITEPAPER.md](LITEPAPER.md), [ROADMAP.md](ROADMAP.md), [SECURITY.md](SECURITY.md) and [EXCHANGE_READINESS.md](EXCHANGE_READINESS.md).
+See [TOKENOMICS.md](TOKENOMICS.md), [LITEPAPER.md](LITEPAPER.md), [ROADMAP.md](ROADMAP.md), [SECURITY.md](SECURITY.md), [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) and [WALLET_INTEGRATION.md](WALLET_INTEGRATION.md).
