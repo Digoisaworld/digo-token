@@ -1,40 +1,53 @@
-# DIGO Tokenomics — Draft (not yet deployed)
+# DIGO Tokenomics — Current On-chain Facts and Pending Policy
 
-## Proposed token parameters
+## Verified token parameters
 - Name: DIGO
 - Symbol: DIGO
-- Network: Solana Mainnet
-- Token standard: Original SPL Token is the current proposal; compatibility review is required before launch.
-- Decimals: **8** (required for a 100 billion whole-token initial mint under the SPL Token u64 supply limit)
-- Initial mint target: **100,000,000,000 DIGO (100 billion)**
+- Network: Solana Mainnet Beta
+- Token standard: Original SPL Token
+- Mint: `7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F`
+- Decimals: **8**
+- Initial minted supply: **100,000,000,000 DIGO**
+- Freeze authority: **None**
+- Mint authority: **active**, held by the project wallet.
+- Metaplex metadata: created and finalized.
+- Metadata PDA: `EU438GAHYf1sSdfZFZk91uUiSNWeAye7jXfiKKkQuPZ4`
+- Metadata update authority: project wallet; metadata remains mutable.
 
-## Supply and authority policy
-- Mint authority: **intended to remain active**, as requested by the founder, to allow future issuance.
-- Freeze authority: **intended to be revoked**.
-- Because mint authority remains active, 100 billion is the planned initial mint, **not a permanent maximum supply**. Future issuance can increase total supply.
-- Before launch, publish the authority address, custody method, issuance conditions, advance notice period, approval process and a public minting log.
-- A multisig with independent signers is recommended for mint authority. A multisig improves control but does not create a hard supply cap.
+The 100 billion figure is the initial minted supply, **not a permanent maximum**. Because mint authority remains active, additional issuance is technically possible and can dilute existing holders. Any future issuance policy, authorization, destination and transaction must be publicly disclosed.
 
 ## Allocation policy — not finalized
-Do not mint until an allocation table totals exactly 100% and identifies wallet control, vesting and unlock conditions. Potential categories should be tied to actual project needs, for example:
+No allocation percentages or vesting schedule are currently approved in this document. Do not imply that a particular allocation has been made unless on-chain balances and beneficial wallet control support it. Before market expansion, publish a table that totals exactly 100% and identifies:
 - Ecosystem and developer incentives
 - AI infrastructure / compute ecosystem
-- Liquidity
+- Liquidity (if and when a pool is created)
 - Treasury and operations
-- Core contributors (with public vesting)
+- Core contributors, with public vesting and unlock conditions
 
-No allocation percentages are approved yet. Avoid large unlocked insider allocations and disclose all related-party wallets.
+Disclose every allocation wallet, beneficial controller, lock/vesting arrangement and related-party relationship. Publish a circulating-supply methodology and holder-concentration report.
+
+## Supply and authority policy
+- Keep the active mint authority risk visible in all public materials.
+- Publish a written issuance policy, notice period and approval process before any additional mint.
+- A multisig with independent signers is recommended for mint authority and treasury custody. A multisig improves operational controls but does not create a hard supply cap.
+- Do not claim that supply is capped or that mint authority is revoked.
+- Metadata is mutable; the update authority can change the name, symbol or metadata URI. Any change should be announced and linked to its on-chain transaction.
 
 ## Intended technology utility (proposed, not live)
-DIGO is being repositioned around AI and technology. Possible token uses, subject to product, legal and security validation:
+DIGO is being developed around AI and technology. Possible token uses, subject to product, legal and security validation:
 - Payments for AI-agent services and API calls.
 - Access credits for participating AI tools, inference and compute providers.
 - Settlement between AI agents and service providers.
 - Developer ecosystem grants and transparent protocol governance.
+
 These are product hypotheses, not existing services or guaranteed token demand. Do not describe them as live until independently testable.
 
-## Supply reporting
-Publish initial minted supply, circulating supply methodology, locked/vesting balances, treasury balances, holder concentration and every subsequent mint or burn.
+## Market status
+A token mint and metadata registration do not create a market. No price, liquidity pool, exchange listing, trading volume, yield, buyback, profit or guaranteed return is claimed. Any future liquidity activity must disclose the pair, source of funds, LP ownership/control, lock status, risks and transaction signatures.
 
 ## Risk disclosures
-No promise of price appreciation, profits, yield, buybacks, liquidity or exchange listings. Active mint authority creates dilution risk. Utility, adoption and exchange eligibility must be demonstrated.
+- Active mint authority creates dilution risk.
+- Mutable metadata creates a metadata-change risk.
+- Allocation and vesting policy is pending.
+- Utility, adoption and exchange eligibility must be demonstrated.
+- Independent wallets, explorers, aggregators and exchanges decide their own display, verification and listing status.
