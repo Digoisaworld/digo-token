@@ -1,35 +1,25 @@
 # DIGO — AI × Solana
 
-**DIGO** is being developed as a technology-focused project exploring practical coordination and payments for AI agents and digital services on Solana.
+**DIGO** is a technology-focused project exploring practical coordination and payments for AI agents and digital services on Solana.
 
-## Project status
+## Verified Mainnet status
 
-- [x] Public project repository created
-- [x] Initial project charter and draft tokenomics documented
-- [x] DIGO logo asset published
-- [x] Public project website deployed on GitHub Pages
-- [ ] Mainnet mint created and independently verified
-- [ ] Allocation, vesting and authority policy finalized
-- [ ] AI utility prototype shipped on testnet
-- [ ] Mainnet utility and independent security review
-- [ ] Transparent liquidity and exchange due-diligence package
+- [x] Original SPL Token mint created on Solana Mainnet Beta.
+- [x] Initial supply of **100,000,000,000 DIGO** minted (8 decimals).
+- [x] Freeze authority is absent.
+- [x] Metaplex Token Metadata account created and finalized.
+- [x] On-chain name and symbol registered as DIGO.
+- [x] Metadata URI registered and points to the project-hosted JSON.
+- [x] Public project website deployed through GitHub Pages.
 
-**Important:** DIGO has not yet been created on Solana Mainnet. No mint address, market price, liquidity, exchange listing, partnership or live AI service is being claimed.
+**Mint address:** `7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F`  
+**Metadata PDA:** `EU438GAHYf1sSdfZFZk91uUiSNWeAye7jXfiKKkQuPZ4`  
+**Mint transaction:** [Solana Explorer](https://explorer.solana.com/tx/4FqDVacpp7jpK3B7SKDyd1h99vHtA4xiCGTbkUxf3vkRQBTNztzw9jGUcQs19vNP7ghET2dFwmFCpY54ihnBWZfd?cluster=mainnet-beta)  
+**Metadata transaction:** [Solana Explorer](https://explorer.solana.com/tx/dmmEQmwG3bMmfvjaVXDLKtoAzXp5rY63fmCuTSvYg1E1GbZLSesMq3nJXXmH4tvAaEbeU2uFpntndjRDJcsAXhX?cluster=mainnet-beta)
 
-## Proposed token parameters
+The mint authority remains active and controlled by the project wallet. Therefore 100 billion DIGO is the initial minted supply, **not a permanent maximum**. Future issuance can dilute holders and must be disclosed. The metadata update authority is also retained by the project wallet; metadata is mutable.
 
-| Parameter | Current plan |
-|---|---|
-| Name | DIGO |
-| Symbol | DIGO |
-| Network | Solana Mainnet |
-| Standard | Original SPL Token currently proposed; compatibility review pending |
-| Decimals | **8** |
-| Initial mint target | **100,000,000,000 DIGO** |
-| Mint authority | Remains active by founder preference; custody and issuance policy pending |
-| Freeze authority | None at mint initialization |
-
-The 100 billion figure is the planned initial mint, not a permanent maximum, because the mint authority is intended to remain active. Future issuance can dilute holders and must be disclosed.
+No market price, liquidity, exchange listing, partnership, guaranteed return or live AI service is being claimed.
 
 ## Proposed AI and technology utility
 
@@ -41,6 +31,14 @@ The 100 billion figure is the planned initial mint, not a permanent maximum, bec
 
 These are roadmap concepts, not live products or guaranteed sources of token demand. AI inference remains off-chain; Solana may provide settlement and verifiable coordination.
 
+## Next milestones
+
+- Verify public JSON and logo delivery, image dimensions and caching across wallets/explorers.
+- Publish a transparent allocation, treasury, vesting and future-issuance policy before market expansion.
+- Build and independently test a useful AI/API prototype.
+- Complete security, legal, operational and liquidity due diligence.
+- Apply separately to token directories/verification programs; acceptance is not guaranteed and may require liquidity or other evidence.
+
 ## Principles
 
 - No fake volume, wash trading, undisclosed paid promotion or guaranteed returns.
@@ -50,9 +48,13 @@ These are roadmap concepts, not live products or guaranteed sources of token dem
 - A listing is always the exchange's independent decision; no feature can guarantee it.
 
 ## Links
+
 - Website: https://ehsanatashzaban5-hub.github.io/digo-token/
 - Repository: https://github.com/ehsanatashzaban5-hub/digo-token
-- Solana mint: not created yet
-- Community channels: to be published
-
-See [TOKENOMICS.md](TOKENOMICS.md), [LITEPAPER.md](LITEPAPER.md), [ROADMAP.md](ROADMAP.md), [SECURITY.md](SECURITY.md), [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) and [WALLET_INTEGRATION.md](WALLET_INTEGRATION.md).
+- Metadata JSON: https://raw.githubusercontent.com/ehsanatashzaban5-hub/digo-token/main/metadata/token.json
+- Logo: https://raw.githubusercontent.com/ehsanatashzaban5-hub/digo-token/main/assets/digo-logo.png
+- Tokenomics: [TOKENOMICS.md](TOKENOMICS.md)
+- Litepaper: [LITEPAPER.md](LITEPAPER.md)
+- Roadmap: [ROADMAP.md](ROADMAP.md)
+- Security: [SECURITY.md](SECURITY.md)
+- Exchange readiness: [EXCHANGE_READINESS.md](EXCHANGE_READINESS.md)
