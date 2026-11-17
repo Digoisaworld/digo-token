@@ -31,6 +31,10 @@ No market price, liquidity, exchange listing, partnership, guaranteed return or 
 
 These are roadmap concepts, not live products or guaranteed sources of token demand. AI inference remains off-chain; Solana may provide settlement and verifiable coordination.
 
+## Market and swap status
+
+A Raydium SOL/DIGO pool was reported by the project owner, but its successful pool address/signature and on-chain state have not yet been independently recorded in this repository. The website does **not** currently provide a verified live swap flow. See [POOL_AND_SWAP_READINESS.md](POOL_AND_SWAP_READINESS.md) for reported setup details and the evidence required before enabling purchases. No pool price, liquidity, volume or executable route is claimed.
+
 ## Next milestones
 
 - Verify public JSON and logo delivery, image dimensions and caching across wallets/explorers.
@@ -58,3 +62,4 @@ These are roadmap concepts, not live products or guaranteed sources of token dem
 - Roadmap: [ROADMAP.md](ROADMAP.md)
 - Security: [SECURITY.md](SECURITY.md)
 - Exchange readiness: [EXCHANGE_READINESS.md](EXCHANGE_READINESS.md)
+- Pool and swap readiness: [POOL_AND_SWAP_READINESS.md](POOL_AND_SWAP_READINESS.md)
