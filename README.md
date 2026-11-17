@@ -55,8 +55,8 @@ A Raydium SOL/DIGO pool was reported by the project owner, but its successful po
 
 - Intended website URL (pending successful Pages deployment): https://digoisaworld.github.io/digo-token/
 - Repository: https://github.com/Digoisaworld/digo-token
-- Metadata JSON: https://raw.githubusercontent.com/ehsanatashzaban5-hub/digo-token/main/metadata/token.json
-- Logo: https://raw.githubusercontent.com/ehsanatashzaban5-hub/digo-token/main/assets/digo-logo.png
+- Metadata JSON: https://raw.githubusercontent.com/Digoisaworld/digo-token/main/metadata/token.json
+- Logo: https://raw.githubusercontent.com/Digoisaworld/digo-token/main/assets/digo-logo.png
 - Tokenomics: [TOKENOMICS.md](TOKENOMICS.md)
 - Litepaper: [LITEPAPER.md](LITEPAPER.md)
 - Roadmap: [ROADMAP.md](ROADMAP.md)
