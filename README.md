@@ -49,8 +49,8 @@ These are roadmap concepts, not live products or guaranteed sources of token dem
 
 ## Links
 
-- Website: https://ehsanatashzaban5-hub.github.io/digo-token/
-- Repository: https://github.com/ehsanatashzaban5-hub/digo-token
+- Website: https://digoisaworld.github.io/digo-token/
+- Repository: https://github.com/Digoisaworld/digo-token
 - Metadata JSON: https://raw.githubusercontent.com/ehsanatashzaban5-hub/digo-token/main/metadata/token.json
 - Logo: https://raw.githubusercontent.com/ehsanatashzaban5-hub/digo-token/main/assets/digo-logo.png
 - Tokenomics: [TOKENOMICS.md](TOKENOMICS.md)
