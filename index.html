@@ -2,309 +2,39 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101820">
-<meta name="description" content="DIGO — AI and technology ecosystem on Solana.">
+<meta name="theme-color" content="#0b1218">
+<meta name="description" content="DIGO is a Solana-based project exploring practical infrastructure for AI agents, APIs and digital services.">
 <title>DIGO — AI × Solana</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1218;--panel:#14232c;--line:#29434b;--mint:#49e0b1;--gold:#e8c477;--muted:#a9bdc1}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1d4545 0,transparent 55%),var(--bg);color:#f3f8f7;font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
-.wrap{width:min(1080px,92%);margin:auto}.nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-bottom:1px solid #ffffff16}.brand{font-weight:900;letter-spacing:3px;color:var(--mint);font-size:22px}.nav a,.links a{color:var(--muted);text-decoration:none;margin-left:18px}.hero{text-align:center;padding:82px 0 55px}.badge{display:inline-block;border:1px solid #49e0b155;border-radius:30px;padding:5px 14px;color:var(--mint);font-size:13px}.hero h1{font-size:clamp(54px,10vw,94px);line-height:1;margin:25px 0 12px;letter-spacing:5px}.hero p{color:var(--muted);font-size:20px;margin:0 auto 28px}.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.btn{border:1px solid var(--line);border-radius:12px;padding:12px 20px;color:white;text-decoration:none;background:#1a3038;cursor:pointer;font:inherit}.primary{background:var(--mint);color:#092019;border:0;font-weight:800}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:25px 0 65px}.card{background:linear-gradient(145deg,#172b34,#101c24);border:1px solid var(--line);border-radius:18px;padding:22px}.card h3{margin:0 0 8px;color:var(--mint)}.card p{margin:0;color:var(--muted)}h2{font-size:30px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.stat{padding:18px;border:1px solid var(--line);border-radius:14px}.stat b{display:block;color:var(--gold);font-size:22px}.notice{border-left:3px solid var(--gold);background:#e8c47712;padding:16px 18px;color:#d9d5c7;border-radius:8px;margin:30px 0}footer{border-top:1px solid #ffffff16;padding:28px 0;color:var(--muted);font-size:14px}#walletStatus,#launchStatus{margin-top:14px;color:var(--mint);overflow-wrap:anywhere;font-size:13px}.launch{background:linear-gradient(145deg,#172b34,#101c24);border:1px solid var(--line);border-radius:18px;padding:24px;margin:40px 0 65px}.launch p,.small{color:var(--muted)}.launch button{margin:8px 8px 0 0}.danger{color:#ffd5c8;background:#542b2b;border:1px solid #9a5555}.mono{overflow-wrap:anywhere;font-family:ui-monospace,monospace;font-size:13px}.hidden{display:none}button:disabled{opacity:.5;cursor:not-allowed}
-/* Legacy mint and metadata transaction panels are intentionally disabled: the Mainnet mint and metadata already exist. */
-#metadata,#launch{display:none!important}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1d4545 0,transparent 55%),var(--bg);color:#f3f8f7;font:16px/1.7 system-ui,-apple-system,Segoe UI,sans-serif}.wrap{width:min(1120px,92%);margin:auto}
+nav{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;border-bottom:1px solid #ffffff20;flex-wrap:wrap}.brand{font-weight:900;letter-spacing:4px;color:var(--mint);font-size:24px}.navlinks{display:flex;gap:18px;flex-wrap:wrap}.navlinks a,a{color:var(--mint);text-decoration:none}.navlinks a{color:var(--muted)}a:hover{color:var(--gold)}
+.hero{text-align:center;padding:78px 0 55px}.badge{display:inline-block;border:1px solid #49e0b155;border-radius:30px;padding:5px 14px;color:var(--mint);font-size:13px}.hero h1{font-size:clamp(58px,11vw,100px);line-height:1;margin:25px 0 14px;letter-spacing:6px}.hero p{color:var(--muted);font-size:clamp(18px,3vw,22px);max-width:780px;margin:0 auto 28px}.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:12px;padding:11px 19px;color:white;background:#1a3038;cursor:pointer;font:inherit}.primary{background:var(--mint);color:#092019;border:0;font-weight:800}.section{padding:30px 0 48px}.section h2{font-size:30px;margin-bottom:8px}.lead,.muted{color:var(--muted);max-width:850px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:22px 0}.card{background:linear-gradient(145deg,#172b34,#101c24);border:1px solid var(--line);border-radius:18px;padding:22px}.card h3{margin:0 0 8px;color:var(--mint)}.card p{margin:0;color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:20px 0}.stat{padding:18px;border:1px solid var(--line);border-radius:14px;color:var(--muted)}.stat b{display:block;color:var(--gold);font-size:20px;overflow-wrap:anywhere}.notice{border-left:3px solid var(--gold);background:#e8c47712;padding:16px 18px;color:#d9d5c7;border-radius:8px;margin:20px 0}.mono{overflow-wrap:anywhere;font-family:ui-monospace,monospace;font-size:13px}.docs a{display:block;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#12222a}.status{padding:12px;border:1px solid var(--line);border-radius:12px;color:var(--muted);margin-top:14px;overflow-wrap:anywhere}footer{border-top:1px solid #ffffff20;padding:28px 0 40px;color:var(--muted);font-size:14px}
+@media(max-width:620px){.hero{padding:55px 0 35px}.navlinks{gap:12px}.section h2{font-size:25px}}
 </style>
 </head>
 <body><div class="wrap">
-<header class="nav"><div class="brand">DIGO</div><div class="links"><a href="#mission">Mission</a><a href="#utility">Utility</a><a href="https://github.com/Digoisaworld/digo-token">GitHub</a></div></header>
+<nav><div class="brand">DIGO</div><div class="navlinks"><a href="#mission">Mission</a><a href="#technology">AI vision</a><a href="#token">Token</a><a href="#documents">Documents</a><a href="https://github.com/Digoisaworld/digo-token" target="_blank" rel="noopener">GitHub</a></div></nav>
 <main>
-<section class="hero"><span class="badge">AI × SOLANA · BUILDING IN PUBLIC</span><h1>DIGO</h1><p>Technology for the next generation of AI agents, APIs and digital services.</p><div class="actions"><a class="btn primary" href="#mission">Explore the project</a><button class="btn" id="connect">Connect Phantom</button></div><div id="walletStatus">Wallet is not connected. Connecting never signs a transaction.</div>
-<div id="runtimeDiagnostic" role="status" aria-live="polite" style="margin:10px auto 0;max-width:760px;padding:10px 14px;border:1px solid #29434b;border-radius:10px;color:#e8c477;font-size:12px;overflow-wrap:anywhere">Diagnostics ready. Tap Connect Phantom to inspect this browser.</div></section>
-<section id="mission"><h2>More than a token</h2><p style="color:var(--muted);max-width:720px">DIGO is exploring practical infrastructure for AI agents, developers and digital services. Solana can provide settlement and verifiable coordination while AI inference and compute run off-chain.</p>
-<div class="grid"><article class="card"><h3>AI Agent Hub</h3><p>A discoverable directory of AI agents, tools, service profiles and reputation signals.</p></article><article class="card"><h3>AI API Marketplace</h3><p>Explore metered access to participating model, data and automation APIs.</p></article><article class="card"><h3>Agent Payments</h3><p>Prototype settlement between AI agents and digital-service providers.</p></article><article class="card"><h3>Developer Tools</h3><p>SDKs, integrations and transparent usage metrics for the ecosystem.</p></article></div></section>
-<section id="utility"><h2>Token plan</h2><div class="stats"><div class="stat"><b>DIGO</b>Token symbol</div><div class="stat"><b>Solana</b>Network</div><div class="stat"><b>8</b>Decimals</div><div class="stat"><b>100B</b>Initial supply minted</div></div>
-<div class="notice"><strong>Mainnet launch:</strong> The DIGO SPL token has been created and its initial supply of 100 billion DIGO is confirmed on Solana Mainnet Beta. Mint authority remains active, so 100 billion is the initial supply, not a permanent maximum. No price, liquidity, live AI service or exchange listing is being claimed.<br><span class="mono">Mint: 7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F</span></div></section>
-<section class="launch" id="metadata"><h2>Register DIGO metadata</h2>
-<p>The DIGO SPL mint already exists on Solana Mainnet. This separate step registers its name, symbol and logo URI with the Metaplex Token Metadata program. It does not create or mint tokens.</p>
-<p><strong>Required:</strong> an existing Mainnet SPL mint with 8 decimals, initial supply of 100 billion DIGO, and mint authority still controlled by the connected Phantom wallet.</p>
-<label for="metadataMint">Existing DIGO Mint address</label><br><input id="metadataMint" class="btn mono" style="width:min(100%,620px);text-align:left" placeholder="Paste the confirmed Mainnet mint address" autocomplete="off">
-<div class="actions" style="justify-content:flex-start"><button class="btn" id="prepareMetadata" disabled>1. Verify mint and simulate metadata</button><button class="btn primary" id="approveMetadata" disabled>2. Review and approve in Phantom</button></div>
-<div id="metadataStatus" aria-live="polite" class="small"></div><div id="metadataDetails" class="small mono"></div>
-<p class="small">Metadata URI currently points to the project's GitHub-hosted JSON. GitHub is convenient but does not guarantee permanent decentralized storage. The metadata account will remain mutable so the project can update its URI later.</p>
-</section>
-<section class="launch" id="launch"><h2>Prepare DIGO Mainnet mint</h2>
-<p>This tool prepares one transaction containing mint-account creation, SPL Token initialization, your associated token account creation and the initial mint of 100 billion DIGO. It does not send anything until you separately approve the final action in Phantom.</p>
-<p><strong>Wallet:</strong> <span id="launchWallet" class="mono">Not connected</span><br><strong>Network:</strong> Solana Mainnet Beta<br><strong>Token program:</strong> Original SPL Token<br><strong>Decimals:</strong> 8<br><strong>Initial supply:</strong> 100,000,000,000 DIGO<br><strong>Mint authority:</strong> Your connected Phantom wallet<br><strong>Freeze authority:</strong> None</p>
-<div class="notice"><strong>Important:</strong> Mint authority will remain active, so total supply is not permanently capped. The DIGO Mainnet mint has already been created. Use the existing mint address in the Metadata section above; do not prepare another mint.</div>
-<div class="actions" style="justify-content:flex-start"><button class="btn" id="prepare" disabled>1. Prepare and simulate transaction</button><button class="btn primary" id="approve" disabled>2. Review and approve in Phantom</button></div>
-<div id="launchStatus" aria-live="polite">Connect the intended Phantom wallet to begin. No seed phrase or private key is needed.</div>
-<div id="txDetails" class="small mono"></div>
-</section>
-<section class="launch" id="market-status"><h2>Market access status</h2><p class="small">DIGO is not currently available for purchase or swap through this website. A reported Raydium pool has not yet been independently verified with its pool address, successful transaction, vault balances and executable route. Do not send SOL or tokens to unofficial addresses.</p><p class="small">The Phantom connection above only shares your public wallet address. It does not authorize or submit a transaction.</p><p class="small">Official token mint: <span class="mono">7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F</span></p></section></main><footer>© DIGO Project · Built in public. No guaranteed returns or exchange listings.</footer>
+<section class="hero"><span class="badge">AI × SOLANA · BUILDING IN PUBLIC</span><h1>DIGO</h1><p>Exploring practical infrastructure for AI agents, developer tools, APIs and digital services — with Solana for transparent settlement and coordination.</p><div class="actions"><a class="btn primary" href="#technology">Explore the vision</a><button class="btn" id="connect" type="button">Connect Phantom</button></div><div id="walletStatus" class="status" role="status" aria-live="polite">Wallet disconnected. Connecting only reads your public address; this website does not request signatures or submit transactions.</div></section>
+<section id="mission" class="section"><h2>Our mission</h2><p class="lead">DIGO's long-term mission is to help AI agents and digital services discover one another, access tools and APIs, and settle usage in a transparent way. AI inference and compute are intended to remain off-chain; blockchain is considered for verifiable coordination and settlement where it adds real value.</p><div class="grid"><article class="card"><h3>Open ecosystem</h3><p>Build interoperable tools and documented interfaces for developers and service providers.</p></article><article class="card"><h3>Useful AI</h3><p>Prioritize measurable utility, reliability, privacy and user control over hype or unsupported claims.</p></article><article class="card"><h3>Transparent coordination</h3><p>Publish token facts, treasury policies, development progress and material changes.</p></article></div></section>
+<section id="technology" class="section"><h2>AI and innovation roadmap</h2><p class="lead">The following are planned research and product directions, not claims of currently live services. Each feature must be prototyped, tested and documented before being described as available.</p><div class="grid"><article class="card"><h3>DIGO Agent Hub</h3><p>A searchable directory of AI agents and tools with service descriptions, versions, capability metadata and reputation signals.</p></article><article class="card"><h3>AI API Marketplace</h3><p>A future discovery and metered-access layer for participating model, data and automation APIs, with clear pricing and provider terms.</p></article><article class="card"><h3>Agent-to-Agent Settlement</h3><p>Prototype payment flows for agents purchasing digital services, with transaction limits, receipts, failure handling and user approval.</p></article><article class="card"><h3>Compute Integrations</h3><p>Potential integrations with independent inference and GPU providers. DIGO does not currently claim to operate a GPU network.</p></article><article class="card"><h3>Developer SDK</h3><p>Planned SDKs, sample applications, API documentation and a test environment for integrations.</p></article><article class="card"><h3>Transparency Dashboard</h3><p>Planned public reporting for token supply, authority changes, treasury movements, ecosystem metrics and incidents.</p></article></div><div class="notice"><strong>Current delivery status:</strong> These are roadmap concepts. No production AI marketplace, agent network, provider partnership, SDK, revenue stream or live token utility is claimed at this time.</div></section>
+<section id="token" class="section"><h2>DIGO token</h2><div class="stats"><div class="stat"><b>DIGO</b>Symbol</div><div class="stat"><b>Solana</b>Network</div><div class="stat"><b>Original SPL</b>Token standard</div><div class="stat"><b>8</b>Decimals</div><div class="stat"><b>100 billion</b>Initial minted supply</div></div><div class="notice"><strong>Supply and authority disclosure:</strong> 100 billion DIGO is the initial minted supply, not a hard maximum. Mint authority remains active and can permit additional issuance; freeze authority is None. Metadata update authority remains active. Allocation percentages, vesting and a binding future issuance policy have not yet been finalized. These are material risks.</div><p class="mono">Mint address: 7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F</p><p class="muted">DIGO is not offered for purchase or swap on this website. No live price, trading volume, liquidity, yield, buyback, revenue or exchange listing is represented here. Wallet connection does not create a trade.</p><div class="actions"><a class="btn" href="https://explorer.solana.com/address/7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F" target="_blank" rel="noopener">View token on Solana Explorer</a><a class="btn" href="https://solscan.io/token/7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F" target="_blank" rel="noopener">View on Solscan</a></div></section>
+<section id="documents" class="section"><h2>Project documents</h2><p class="lead">Public working documents. Drafts describe current facts separately from proposals and items still requiring independent verification.</p><div class="grid docs"><a href="WHITEPAPER.md">Whitepaper — working draft</a><a href="LITEPAPER.md">Litepaper</a><a href="TOKENOMICS.md">Tokenomics and authority disclosure</a><a href="ROADMAP.md">Technology roadmap</a><a href="EXCHANGE_READINESS.md">Exchange due-diligence checklist</a><a href="POOL_AND_SWAP_READINESS.md">Market and liquidity status</a><a href="SECURITY.md">Security policy</a><a href="https://github.com/Digoisaworld/digo-token" target="_blank" rel="noopener">Source repository</a></div></section>
+</main>
+<footer>© DIGO Project. Experimental technology roadmap. No investment advice, guaranteed returns, listing commitments or claim of current AI service availability.</footer>
 </div>
 <script>
 (function(){
- const out=document.getElementById("runtimeDiagnostic");
- const button=document.getElementById("connect");
- function report(message){out.textContent=message;}
- window.addEventListener("error",function(e){report("JavaScript error: "+(e.message||"unknown error")+" | "+(e.filename||"")+" :"+(e.lineno||""));});
- window.addEventListener("unhandledrejection",function(e){const r=e.reason;report("Unhandled async error: "+(r&&r.message?r.message:String(r)));});
- button.addEventListener("click",function(){
-  const p=window.phantom&&window.phantom.solana;
-  const s=window.solana;
-  const provider=p||s||null;
-  report("Button click detected. Module ready: "+(window.__DIGO_MODULE_READY__?"YES":"NO")+
-   " | window.phantom: "+(!!window.phantom)+
-   " | phantom.solana: "+(!!p)+
-   " | window.solana: "+(!!s)+
-   " | connect(): "+(!!provider&&typeof provider.connect==="function")+
-   " | isConnected: "+(provider?String(!!provider.isConnected):"n/a")+
-   " | userAgent: "+navigator.userAgent);
-  setTimeout(async function(){
-   if(window.__DIGO_MODULE_READY__)return;
-   report("Running direct dependency tests from the button click…");
-   const tests=[
-    ["buffer","https://esm.sh/buffer@6.0.3"],
-    ["web3.js","https://esm.sh/@solana/web3.js@1.98.4"],
-    ["spl-token","https://esm.sh/@solana/spl-token@0.4.13?bundle"]
-   ];
-   const results=await Promise.all(tests.map(async([name,url])=>{
-    try{await import(url);return name+": OK";}
-    catch(e){return name+": FAILED — "+(e&&e.message?e.message:String(e));}
-   }));
-   report("Direct import tests: "+results.join(" | ")+" | online: "+navigator.onLine+" | module ready: "+!!window.__DIGO_MODULE_READY__);
-  },500);
- },true);
- window.addEventListener("load",function(){setTimeout(function(){if(!window.__DIGO_MODULE_READY__)report("Page loaded, but Solana module has not initialized. Check JavaScript import/network errors.");},1500);});
+ const button=document.getElementById("connect"),status=document.getElementById("walletStatus");
+ button.addEventListener("click",async()=>{
+  const provider=window.phantom?.solana;
+  if(!provider||typeof provider.connect!=="function"){status.textContent="Phantom was not detected. Open this page inside the Phantom app browser or install the official Phantom wallet. No transaction has been requested.";return;}
+  button.disabled=true;status.textContent="Requesting a read-only wallet connection…";
+  try{const result=await provider.connect();const address=result?.publicKey?.toString();if(!address)throw new Error("No public address returned.");status.textContent="Connected public address: "+address+". This site did not request a signature or transaction.";}
+  catch(error){status.textContent="Connection cancelled or unavailable: "+(error?.message||String(error));}
+  finally{button.disabled=false;}
+ });
 })();
 </script>
-<script type="module">
-(async()=>{
- const box=document.getElementById("runtimeDiagnostic");
- const tests=[
-  ["buffer","https://esm.sh/buffer@6.0.3"],
-  ["web3.js","https://esm.sh/@solana/web3.js@1.98.4"],
-  ["spl-token","https://esm.sh/@solana/spl-token@0.4.13?bundle"]
- ];
- const results=await Promise.all(tests.map(async([name,url])=>{
-  try{await import(url);return name+": OK";}
-  catch(e){return name+": FAILED — "+(e?.message||String(e))+" ["+url+"]";}
- }));
- window.__DIGO_IMPORT_DIAGNOSTICS__=results;
- box.textContent="Dependency diagnostics: "+results.join(" | ")+" | online: "+navigator.onLine+" | page: "+location.href;
-})();
-</script>
-<script type="module">
-import {Buffer} from "https://esm.sh/buffer@6.0.3";
-import {Connection,PublicKey,Keypair,SystemProgram,Transaction,TransactionInstruction,LAMPORTS_PER_SOL} from "https://esm.sh/@solana/web3.js@1.98.4";
-import {TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID, MINT_SIZE, getMinimumBalanceForRentExemptMint, createInitializeMintInstruction, getAssociatedTokenAddress, createAssociatedTokenAccountInstruction, createMintToInstruction, getMint} from "https://esm.sh/@solana/spl-token@0.4.13?bundle";
-window.__DIGO_MODULE_READY__=true;
-const EXPECTED="HK7Fh86hwAQwjqmLrm8L1JLVS57Eo7jD2FfzaHdhmZbQ";
-const METADATA_PROGRAM_ID=new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
-const METADATA_URI="https://raw.githubusercontent.com/ehsanatashzaban5-hub/digo-token/main/metadata/token.json";
-const RPC="https://rpc.anpardaz.ir/rpc";
-const connection=new Connection(RPC,"confirmed");
-const status=document.getElementById("walletStatus"), launchStatus=document.getElementById("launchStatus");
-const walletLabel=document.getElementById("launchWallet"), prepareBtn=document.getElementById("prepare"), approveBtn=document.getElementById("approve"), details=document.getElementById("txDetails");
-let provider=null, wallet=null, prepared=null;
-const metadataStatus=document.getElementById("metadataStatus"), metadataDetails=document.getElementById("metadataDetails");
-const metadataMintInput=document.getElementById("metadataMint"), prepareMetadataBtn=document.getElementById("prepareMetadata"), approveMetadataBtn=document.getElementById("approveMetadata");
-function getProvider(){return window.phantom?.solana ?? window.solana ?? null;}
-function setStatus(t){launchStatus.textContent=t;}
-async function simulateLegacyTransaction(tx){
- const raw=tx.serialize({requireAllSignatures:false,verifySignatures:false});
- const encoded=Buffer.from(raw).toString("base64");
- const response=await connection._rpcRequest("simulateTransaction",[encoded,{encoding:"base64",sigVerify:false,replaceRecentBlockhash:true,commitment:"confirmed"}]);
- if(response.error)throw new Error("RPC simulation request failed: "+JSON.stringify(response.error));
- if(!response.result||!response.result.value)throw new Error("RPC returned an invalid simulation response: "+JSON.stringify(response));
- return response.result;
-}
-document.getElementById("connect").addEventListener("click",async()=>{
- provider=getProvider();
- if(!provider || typeof provider.connect!=="function"){
-  status.textContent="Phantom provider was not detected in this page. Open the URL directly in Phantom's in-app browser (not Chrome or an external tab), then reload.";
-  return;
- }
- status.textContent="Phantom provider detected"+(provider.isPhantom?" (verified flag present)":" (provider flag unavailable)")+". Requesting wallet connection…";
- try{
-  const r=await Promise.race([
-   provider.connect(),
-   new Promise((_,reject)=>setTimeout(()=>reject(new Error("Connection timed out after 20 seconds. Close and reopen this page inside Phantom, then try once more.")),20000))
-  ]);
-  if(!r?.publicKey)throw new Error("Phantom did not return a public wallet address.");
-  wallet=new PublicKey(r.publicKey.toString());const a=wallet.toBase58();
-  status.textContent="Connected public wallet: "+a+". No transaction was requested or signed.";
-  walletLabel.textContent=a;prepareBtn.disabled=false;prepareMetadataBtn.disabled=false;
-  setStatus(a===EXPECTED?"Expected wallet connected. Prepare the transaction to inspect exact costs.":"Connected wallet differs from the previously confirmed address. Verify it in Phantom before proceeding.");
- }
- catch(e){status.textContent="Phantom connection did not complete: "+(e.message||String(e));setStatus("Wallet is not connected. No transaction was sent.");}
-});
-let prepareStage="Not started";
-async function prepare(){
- prepareStage="Checking Phantom wallet";
- if(!provider||!wallet)throw new Error("Connect Phantom first.");
- if(wallet.toBase58()!==EXPECTED)throw new Error("Connected wallet does not match the previously confirmed recipient address. Disconnect and select the correct Phantom account.");
- prepareStage="Generating temporary mint keypair";
- const mint=Keypair.generate();
- prepareStage="Deriving associated token account";
- const ata=await getAssociatedTokenAddress(mint.publicKey,wallet,false,TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID);
- prepareStage="Fetching mint account rent from Solana";
- const rent=await getMinimumBalanceForRentExemptMint(connection);
- prepareStage="Fetching token account rent from Solana";
- const ataRent=await connection.getMinimumBalanceForRentExemption(165,"confirmed");
- prepareStage="Fetching latest Mainnet blockhash";
- const latest=await connection.getLatestBlockhash("confirmed");
- const tx=new Transaction({feePayer:wallet,recentBlockhash:latest.blockhash});
- tx.add(SystemProgram.createAccount({fromPubkey:wallet,newAccountPubkey:mint.publicKey,space:MINT_SIZE,lamports:rent,programId:TOKEN_PROGRAM_ID}));
- tx.add(createInitializeMintInstruction(mint.publicKey,8,wallet,null,TOKEN_PROGRAM_ID));
- tx.add(createAssociatedTokenAccountInstruction(wallet,ata,wallet,mint.publicKey,TOKEN_PROGRAM_ID,ASSOCIATED_TOKEN_PROGRAM_ID));
- tx.add(createMintToInstruction(mint.publicKey,ata,wallet,10000000000000000000n,[],TOKEN_PROGRAM_ID));
- tx.partialSign(mint);
- prepareStage="Simulating transaction on Solana Mainnet";
- const sim=await simulateLegacyTransaction(tx);
- if(sim.value.err)throw new Error("Simulation failed: "+JSON.stringify(sim.value.err)+" "+(sim.value.logs||[]).join(" | "));
- prepareStage="Estimating transaction network fee";
- const fee=await connection.getFeeForMessage(tx.compileMessage(),"confirmed");
- if(fee.value===null)throw new Error("Could not estimate transaction fee. Try again.");
- prepareStage="Reading Phantom wallet SOL balance";
- const balance=await connection.getBalance(wallet,"confirmed");
- const total=rent+ataRent+fee.value;
- if(balance<total)throw new Error("Insufficient SOL. Required at least "+(total/LAMPORTS_PER_SOL).toFixed(6)+" SOL for mint rent and estimated network fee; available "+(balance/LAMPORTS_PER_SOL).toFixed(6)+" SOL.");
- prepareStage="Preparing transaction review details";
- prepared={mint,ata,tx,latest,rent,ataRent,fee:fee.value,balance};
- details.textContent="Mint address: "+mint.publicKey.toBase58()+"
-Recipient token account: "+ata.toBase58()+"
-Mint account rent: "+(rent/LAMPORTS_PER_SOL).toFixed(6)+" SOL
-ATA rent (165-byte token account): "+(ataRent/LAMPORTS_PER_SOL).toFixed(6)+" SOL
-Estimated network fee: "+(fee.value/LAMPORTS_PER_SOL).toFixed(6)+" SOL
-Total estimated required: "+(total/LAMPORTS_PER_SOL).toFixed(6)+" SOL
-Current wallet balance: "+(balance/LAMPORTS_PER_SOL).toFixed(6)+" SOL
-Simulation: successful.
-Transaction: 4 instructions; create mint, initialize 8 decimals/no freeze authority, create ATA, mint 100B DIGO.";
- approveBtn.disabled=false;
- setStatus("Simulation succeeded. Review the mint address and costs below. No transaction has been sent.");
-}
-prepareMetadataBtn.disabled=true;
-prepareBtn.addEventListener("click",async()=>{prepareBtn.disabled=true;approveBtn.disabled=true;details.textContent="Preparing and simulating on Mainnet...";try{await prepare();}catch(e){const msg="Failed at: "+prepareStage+" | "+(e?.message||String(e));setStatus(msg);details.textContent=msg+"
-Error name: "+(e?.name||"unknown")+"
-Details: "+(e?.stack||"No stack trace");}finally{prepareBtn.disabled=!wallet; }});
-approveBtn.addEventListener("click",async()=>{
- if(!prepared||!provider) return;
- approveBtn.disabled=true;
- try{
-  const current=provider.publicKey?.toString();
-  if(current!==wallet.toBase58())throw new Error("Phantom account changed. Reconnect and prepare again.");
-  setStatus("Refreshing blockhash and re-simulating immediately before Phantom approval...");
-  const latest=await connection.getLatestBlockhash("confirmed");
-  prepared.tx.recentBlockhash=latest.blockhash;
-  prepared.tx.partialSign(prepared.mint);
-  const freshSim=await simulateLegacyTransaction(prepared.tx);
-  if(freshSim.value.err)throw new Error("Fresh simulation failed: "+JSON.stringify(freshSim.value.err)+" "+(freshSim.value.logs||[]).join(" | "));
-  const freshFee=await connection.getFeeForMessage(prepared.tx.compileMessage(),"confirmed");
-  if(freshFee.value===null)throw new Error("Could not estimate fresh transaction fee.");
-  const freshBalance=await connection.getBalance(wallet,"confirmed");
-  const required=prepared.rent+prepared.ataRent+freshFee.value;
-  if(freshBalance<required)throw new Error("Insufficient SOL at approval time. Required "+(required/LAMPORTS_PER_SOL).toFixed(6)+" SOL; available "+(freshBalance/LAMPORTS_PER_SOL).toFixed(6)+" SOL.");
-  prepared.latest=latest;
-  prepared.fee=freshFee.value;
-  prepared.balance=freshBalance;
-  setStatus("Fresh simulation succeeded. Review the transaction in Phantom and approve only if its details match.");
-  const result=await provider.signAndSendTransaction(prepared.tx);
-  const signature=result.signature;
-  setStatus("Transaction submitted. Waiting for Mainnet confirmation...");
-  const conf=await connection.confirmTransaction({signature,blockhash:latest.blockhash,lastValidBlockHeight:latest.lastValidBlockHeight},"confirmed");
-  if(conf.value.err)throw new Error("Transaction failed on chain: "+JSON.stringify(conf.value.err));
-  details.textContent+="
-Transaction signature: "+signature+"
-Mint address: "+prepared.mint.publicKey.toBase58()+"
-Explorer: https://explorer.solana.com/tx/"+signature;
-  setStatus("Mainnet transaction confirmed. Independently verify mint supply, decimals, authorities and ATA on Solana Explorer before announcing DIGO.");
- }catch(e){setStatus("Not confirmed: "+(e.message||String(e))+". If Phantom rejected it, no token was created.");approveBtn.disabled=false;}
-});
-
-
-let preparedMetadata=null;
-function metadataText(value){const b=new TextEncoder().encode(value);return [b.length&255,(b.length>>8)&255,(b.length>>16)&255,(b.length>>24)&255,...b];}
-function metadataInstruction(mint){
- const [metadata]=PublicKey.findProgramAddressSync([new TextEncoder().encode("metadata"),METADATA_PROGRAM_ID.toBytes(),mint.toBytes()],METADATA_PROGRAM_ID);
- const name="DIGO",symbol="DIGO",uri=METADATA_URI;
- const data=Uint8Array.from([33,...metadataText(name),...metadataText(symbol),...metadataText(uri),0,0,0,0,0,1,0]);
- const keys=[
-  {pubkey:metadata,isSigner:false,isWritable:true},
-  {pubkey:mint,isSigner:false,isWritable:false},
-  {pubkey:wallet,isSigner:true,isWritable:false},
-  {pubkey:wallet,isSigner:true,isWritable:true},
-  {pubkey:wallet,isSigner:false,isWritable:false},
-  {pubkey:SystemProgram.programId,isSigner:false,isWritable:false},
-  {pubkey:new PublicKey("SysvarRent111111111111111111111111111111111"),isSigner:false,isWritable:false}
- ];
- return {metadata,ix:new TransactionInstruction({keys,programId:METADATA_PROGRAM_ID,data:Buffer.from(data)})};
-}
-
-
-async function prepareMetadata(){
- if(!provider||!wallet)throw new Error("Connect the intended Phantom wallet first.");
- if(wallet.toBase58()!==EXPECTED)throw new Error("Connected wallet does not match the previously confirmed wallet.");
- const mint=new PublicKey(metadataMintInput.value.trim());
- const info=await connection.getAccountInfo(mint,"confirmed");
- if(!info||!info.owner.equals(TOKEN_PROGRAM_ID))throw new Error("This address is not an initialized Original SPL Token mint on Mainnet.");
- const state=await getMint(connection,mint,"confirmed",TOKEN_PROGRAM_ID);
- if(state.decimals!==8)throw new Error("Mint decimals are "+state.decimals+", not the planned 8.");
- if(!state.mintAuthority||!state.mintAuthority.equals(wallet))throw new Error("The connected wallet is not the active mint authority.");
- if(state.supply!==10000000000000000000n)throw new Error("Mint supply does not equal the planned initial 100 billion DIGO.");
- const {metadata,ix}=metadataInstruction(mint);
- const existing=await connection.getAccountInfo(metadata,"confirmed");
- if(existing)throw new Error("Metadata account already exists. No transaction is needed.");
- const latest=await connection.getLatestBlockhash("confirmed");
- const tx=new Transaction({feePayer:wallet,recentBlockhash:latest.blockhash}).add(ix);
- const sim=await simulateLegacyTransaction(tx);
- if(sim.value.err)throw new Error("Metadata simulation failed: "+JSON.stringify(sim.value.err)+" "+(sim.value.logs||[]).join(" | "));
- const fee=await connection.getFeeForMessage(tx.compileMessage(),"confirmed");
- if(fee.value===null)throw new Error("Could not estimate network fee.");
- const balance=await connection.getBalance(wallet,"confirmed");
- if(balance<=fee.value)throw new Error("Wallet balance is not sufficient even for the estimated network fee; metadata account rent is also required.");
- preparedMetadata={mint,metadata,tx,latest,fee:fee.value};
- metadataDetails.textContent="Mint: "+mint.toBase58()+"
-Metadata PDA: "+metadata.toBase58()+"
-Name: DIGO
-Symbol: DIGO
-Decimals verified: 8
-Supply verified: 100,000,000,000 DIGO
-Mint authority verified: connected wallet
-Metadata URI: "+METADATA_URI+"
-Estimated network fee: "+(fee.value/LAMPORTS_PER_SOL).toFixed(6)+" SOL
-Simulation: successful. Phantom will show the final transaction and required rent.";
- metadataStatus.textContent="Mint checks and simulation passed. Nothing has been sent.";
- approveMetadataBtn.disabled=false;
-}
-prepareMetadataBtn.addEventListener("click",async()=>{prepareMetadataBtn.disabled=true;approveMetadataBtn.disabled=true;metadataStatus.textContent="Checking mint and simulating...";try{await prepareMetadata();}catch(e){metadataStatus.textContent=e.message||String(e);}finally{prepareMetadataBtn.disabled=!wallet;}});
-approveMetadataBtn.addEventListener("click",async()=>{
- if(!preparedMetadata||!provider)return;
- approveMetadataBtn.disabled=true;
- try{
-  if(provider.publicKey?.toString()!==wallet.toBase58())throw new Error("Phantom account changed. Reconnect and prepare again.");
-  metadataStatus.textContent="Refreshing blockhash, re-simulating and checking the wallet balance...";
-  const latest=await connection.getLatestBlockhash("confirmed");
-  preparedMetadata.tx.recentBlockhash=latest.blockhash;
-  const freshSim=await simulateLegacyTransaction(preparedMetadata.tx);
-  if(freshSim.value.err)throw new Error("Fresh metadata simulation failed: "+JSON.stringify(freshSim.value.err)+" "+(freshSim.value.logs||[]).join(" | "));
-  const freshFee=await connection.getFeeForMessage(preparedMetadata.tx.compileMessage(),"confirmed");
-  if(freshFee.value===null)throw new Error("Could not estimate the fresh network fee.");
-  const freshBalance=await connection.getBalance(wallet,"confirmed");
-  const rentRequired=await connection.getMinimumBalanceForRentExemption(679,"confirmed");
-  if(freshBalance<freshFee.value+rentRequired)throw new Error("Insufficient SOL for metadata rent and network fee. Required at least "+((freshFee.value+rentRequired)/LAMPORTS_PER_SOL).toFixed(6)+" SOL; available "+(freshBalance/LAMPORTS_PER_SOL).toFixed(6)+" SOL.");
-  preparedMetadata.latest=latest;
-  metadataStatus.textContent="Fresh simulation passed. Review the metadata instruction and rent in Phantom; approve only if correct.";
-  const result=await provider.signAndSendTransaction(preparedMetadata.tx);
-  const signature=result.signature;
-  metadataStatus.textContent="Submitted. Waiting for Mainnet confirmation...";
-  const conf=await connection.confirmTransaction({signature,blockhash:latest.blockhash,lastValidBlockHeight:latest.lastValidBlockHeight},"confirmed");
-  if(conf.value.err)throw new Error("On-chain transaction failed: "+JSON.stringify(conf.value.err));
-  const check=await connection.getAccountInfo(preparedMetadata.metadata,"confirmed");
-  if(!check||!check.owner.equals(METADATA_PROGRAM_ID))throw new Error("Transaction confirmed but Metadata PDA verification failed. Check Explorer before proceeding.");
-  metadataDetails.textContent+="
-Confirmed signature: "+signature+"
-Metadata PDA verified on Mainnet.
-Explorer: https://explorer.solana.com/tx/"+signature;
-  metadataStatus.textContent="Metadata transaction confirmed and Metadata PDA verified on Mainnet.";
- }catch(e){metadataStatus.textContent="Not confirmed: "+(e.message||String(e));approveMetadataBtn.disabled=false;}
-});
-</script></body></html>
+</body></html>

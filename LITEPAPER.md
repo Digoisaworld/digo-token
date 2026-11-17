@@ -1,6 +1,6 @@
 # DIGO Litepaper — Working Draft
 
-**Version:** 0.2 · **Status:** Pre-launch. DIGO has not yet been minted on Solana Mainnet.
+**Version:** 1.0 · **Status:** Working draft. The DIGO SPL token has been minted on Solana Mainnet; proposed ecosystem products are not live.
 
 ## 1. Vision
 DIGO aims to build a technology-focused ecosystem at the intersection of Solana and artificial intelligence. The long-term direction is practical infrastructure for AI agents, developers and digital services — not a charity or donation project.
