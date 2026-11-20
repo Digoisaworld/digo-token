@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>به‌روزرسانی لوگوی DIGO در سولانا</title>
+<style>
+body{font-family:Tahoma,Arial,sans-serif;background:#101820;color:#eef5f4;margin:0;padding:24px;line-height:1.9}
+main{max-width:720px;margin:32px auto;background:#192831;border:1px solid #31505a;border-radius:18px;padding:24px}
+h1{font-size:22px;color:#7de0bd}p{color:#d1dfdf}.row{background:#102027;border-radius:10px;padding:12px;margin:12px 0;overflow-wrap:anywhere}
+button{border:0;border-radius:10px;padding:13px 18px;margin:8px 4px;font-size:15px;font-weight:bold;cursor:pointer;background:#74dfb6;color:#102027}
+button:disabled{opacity:.5;cursor:not-allowed}.warn{color:#ffd58a}.ok{color:#8de7b9}#status{white-space:pre-wrap;background:#0c171c;padding:14px;border-radius:10px;min-height:55px}
+small{color:#a9bcbc}
+</style></head>
+<body><main>
+<h1>به‌روزرسانی لوگوی توکن DIGO</h1>
+<p>این ابزار فقط URI متادیتای توکن را روی شبکه اصلی سولانا به‌روزرسانی می‌کند. تراکنش فقط پس از تأیید شما در Phantom امضا می‌شود. هیچ عبارت بازیابی یا کلید خصوصی از شما دریافت نمی‌شود.</p>
+<div class="row"><b>Mint:</b><br>7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F</div>
+<div class="row"><b>Update Authority مورد انتظار:</b><br>HK7Fh86hwAQwjqmLrm8L1JLVS57Eo7jD2FfzaHdhmZbQ</div>
+<div class="row"><b>URI جدید:</b><br>https://raw.githubusercontent.com/Digoisaworld/digo-token/main/metadata/token.json</div>
+<p class="warn">قبل از ارسال، ابزار آدرس کیف پول، Update Authority و URI فعلی را بررسی می‌کند. اگر هرکدام مطابق نباشند، متوقف می‌شود.</p>
+<button id="connect">۱. اتصال Phantom و بررسی</button>
+<button id="update" disabled>۲. امضای تراکنش و به‌روزرسانی</button>
+<div id="status">آماده اتصال. این صفحه را فقط از دامنه رسمی GitHub Pages پروژه باز کنید.</div>
+<small>شبکه: Solana Mainnet · کارمزد شبکه بر عهده کیف پول متصل است.</small>
+</main>
+<script type="module">
+import { createUmi } from 'https://esm.sh/@metaplex-foundation/umi-bundle-defaults';
+import { walletAdapterIdentity } from 'https://esm.sh/@metaplex-foundation/umi-signer-wallet-adapters';
+import { mplTokenMetadata, fetchDigitalAsset, updateV1 } from 'https://esm.sh/@metaplex-foundation/mpl-token-metadata';
+import { PhantomWalletAdapter } from 'https://esm.sh/@solana/wallet-adapter-phantom';
+
+const MINT='7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F';
+const AUTH='HK7Fh86hwAQwjqmLrm8L1JLVS57Eo7jD2FfzaHdhmZbQ';
+const URI='https://raw.githubusercontent.com/Digoisaworld/digo-token/main/metadata/token.json';
+const OLD='https://raw.githubusercontent.com/ehsanatashzaban5-hub/digo-token/main/metadata/token.json';
+const status=document.getElementById('status'), connectBtn=document.getElementById('connect'), updateBtn=document.getElementById('update');
+let umi, wallet, asset;
+const log=(s)=>status.textContent=s;
+const mintPk=(s)=>s;
+connectBtn.onclick=async()=>{
+  connectBtn.disabled=true; updateBtn.disabled=true;
+  try{
+    if(!window.solana?.isPhantom) throw new Error('Phantom در این مرورگر شناسایی نشد. صفحه را در مرورگر داخلی Phantom باز کنید.');
+    wallet=new PhantomWalletAdapter();
+    await wallet.connect();
+    const connected=wallet.publicKey?.toBase58();
+    if(connected!==AUTH) throw new Error('این کیف پول Update Authority نیست. آدرس متصل: '+connected);
+    umi=createUmi('https://api.mainnet-beta.solana.com').use(mplTokenMetadata()).use(walletAdapterIdentity(wallet));
+    asset=await fetchDigitalAsset(umi,mintPk(MINT));
+    const actualAuthority=String(asset.metadata.updateAuthority);
+    if(actualAuthority!==AUTH) throw new Error('Update Authority ثبت‌شده روی زنجیره با مقدار مورد انتظار یکی نیست: '+actualAuthority);
+    if(!asset.metadata.isMutable) throw new Error('متادیتای توکن تغییرناپذیر است؛ عملیات متوقف شد.');
+    if(asset.metadata.uri===URI){log('متادیتای روی زنجیره از قبل به URI جدید اشاره می‌کند.');return;}
+    log('بررسی موفق شد.\nکیف پول: '+connected+'\nURI فعلی: '+asset.metadata.uri+'\nURI جدید: '+URI+'\n\nبرای ادامه، دکمه دوم را بزنید و جزئیات تراکنش را در Phantom بررسی کنید.');
+    updateBtn.disabled=false;
+  }catch(e){log('متوقف شد: '+(e?.message||String(e)));}finally{connectBtn.disabled=false;}
+};
+updateBtn.onclick=async()=>{
+  updateBtn.disabled=true;
+  try{
+    if(!wallet?.connected||!asset) throw new Error('ابتدا کیف پول را متصل و بررسی کنید.');
+    if(wallet.publicKey.toBase58()!==AUTH) throw new Error('آدرس کیف پول تغییر کرده است؛ دوباره بررسی کنید.');
+    const latest=await fetchDigitalAsset(umi,MINT);
+    if(String(latest.metadata.updateAuthority)!==AUTH||!latest.metadata.isMutable) throw new Error('وضعیت اختیار یا قابلیت تغییر متادیتا تغییر کرده است.');
+    if(latest.metadata.uri===URI){log('URI جدید از قبل ثبت شده است.');return;}
+    const confirmed=window.confirm('تراکنش فقط URI متادیتای DIGO را تغییر می‌دهد.\nاز URI فعلی:\n'+latest.metadata.uri+'\nبه URI جدید:\n'+URI+'\n\nدر Phantom امضا و ارسال شود؟');
+    if(!confirmed){log('درخواست توسط شما لغو شد.');return;}
+    log('در انتظار تأیید Phantom…');
+    const result=await updateV1(umi,{mint:MINT,authority:umi.identity,data:{...latest.metadata,uri:URI}}).sendAndConfirm(umi);
+    const sig=result.signature?umi.utils.bytes.bs58.deserialize(result.signature)[0]:null;
+    const verified=await fetchDigitalAsset(umi,MINT);
+    if(verified.metadata.uri!==URI) throw new Error('تراکنش ارسال شد اما تأیید نهایی URI هنوز قابل مشاهده نیست. امضای تراکنش: '+(sig||'در خروجی کیف پول'));
+    log('موفقیت‌آمیز! URI جدید روی زنجیره تأیید شد.\nURI: '+verified.metadata.uri+'\nاکسپلورر: https://solscan.io/token/'+MINT);
+  }catch(e){log('خطا: '+(e?.message||String(e)));updateBtn.disabled=false;}
+};
+</script></body></html>
