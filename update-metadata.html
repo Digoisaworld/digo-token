@@ -20,7 +20,7 @@ small{color:#a9bcbc}
 <p class="warn">قبل از ارسال، ابزار آدرس کیف پول، Update Authority و URI فعلی را بررسی می‌کند. اگر هرکدام مطابق نباشند، متوقف می‌شود.</p>
 <button id="connect">۱. اتصال Phantom و بررسی</button>
 <button id="update" disabled>۲. امضای تراکنش و به‌روزرسانی</button>
-<div id="status">آماده اتصال. این صفحه را فقط از دامنه رسمی GitHub Pages پروژه باز کنید.</div>
+<div id="status">آماده اتصال به RPC جایگزین شبکه اصلی سولانا. این صفحه را فقط از دامنه رسمی GitHub Pages پروژه باز کنید.</div>
 <small>شبکه: Solana Mainnet · کارمزد شبکه بر عهده کیف پول متصل است.</small>
 </main>
 <script type="module">
@@ -44,7 +44,7 @@ connectBtn.onclick=async()=>{
     await wallet.connect();
     const connected=wallet.publicKey?.toBase58();
     if(connected!==AUTH) throw new Error('این کیف پول Update Authority نیست. آدرس متصل: '+connected);
-    umi=createUmi('https://api.mainnet-beta.solana.com').use(mplTokenMetadata()).use(walletAdapterIdentity(wallet));
+    umi=createUmi('https://solana-rpc.publicnode.com').use(mplTokenMetadata()).use(walletAdapterIdentity(wallet));
     asset=await fetchDigitalAsset(umi,publicKey(MINT));
     const actualAuthority=String(asset.metadata.updateAuthority);
     if(actualAuthority!==AUTH) throw new Error('Update Authority ثبت‌شده روی زنجیره با مقدار مورد انتظار یکی نیست: '+actualAuthority);
