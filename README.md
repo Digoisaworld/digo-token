@@ -33,6 +33,18 @@ The project is built on Solana and emphasizes interoperability, practical utilit
 
 **Supply disclosure:** 100 billion DIGO is the initial minted supply, not a permanent maximum. Because mint authority remains active, additional issuance is technically possible and could dilute existing holders. No fixed maximum supply should be inferred.
 
+## Website deployment
+
+The website is published from the repository root through GitHub Actions.
+
+Before deployment, open **Settings → Pages** and set **Build and deployment → Source** to **GitHub Actions**. The deployment workflow requires Pages to be enabled for this repository; otherwise GitHub returns a Pages site not found error. After changing the setting, rerun the **Deploy DIGO site to GitHub Pages** workflow from the Actions tab.
+
+The workflow publishes the static site only. It does not deploy a backend or perform blockchain transactions.
+
+## On-chain metadata note
+
+The JSON file in `metadata/token.json` is the off-chain metadata document. Phantom and other wallets first read the URI stored in the Metaplex metadata account on Solana. Editing this repository's JSON does not change that on-chain URI. A URI change requires a transaction signed by the current metadata update authority. Confirm the on-chain URI and verify that it resolves to this repository before announcing that wallet metadata has changed.
+
 ## Official links
 
 - Website: https://digoisaworld.github.io/digo-token/
