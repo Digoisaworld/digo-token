@@ -44,8 +44,20 @@ connectBtn.onclick=async()=>{
     await wallet.connect();
     const connected=wallet.publicKey?.toBase58();
     if(connected!==AUTH) throw new Error('این کیف پول Update Authority نیست. آدرس متصل: '+connected);
-    umi=createUmi('https://solana-rpc.publicnode.com').use(mplTokenMetadata()).use(walletAdapterIdentity(wallet));
-    asset=await fetchDigitalAsset(umi,publicKey(MINT));
+    const rpcEndpoints=['https://solana-rpc.publicnode.com','https://api.mainnet.solana.com'];
+    const rpcErrors=[];
+    for (const endpoint of rpcEndpoints) {
+      try {
+        const candidate=createUmi(endpoint).use(mplTokenMetadata()).use(walletAdapterIdentity(wallet));
+        const candidateAsset=await fetchDigitalAsset(candidate,publicKey(MINT));
+        umi=candidate; asset=candidateAsset;
+        log('اتصال به RPC برقرار شد: '+endpoint+'\\nدر حال بررسی اختیار متادیتا…');
+        break;
+      } catch (rpcError) {
+        rpcErrors.push(endpoint+': '+(rpcError?.message||String(rpcError)));
+      }
+    }
+    if(!umi||!asset) throw new Error('هر دو RPC عمومی درخواست را رد کردند یا در دسترس نیستند. جزئیات: '+rpcErrors.join(' | ')+'\\nبرای ادامه باید یک RPC اختصاصی Mainnet از ارائه‌دهنده معتبر در همین صفحه تنظیم شود؛ کلید خصوصی کیف پول لازم نیست.');
     const actualAuthority=String(asset.metadata.updateAuthority);
     if(actualAuthority!==AUTH) throw new Error('Update Authority ثبت‌شده روی زنجیره با مقدار مورد انتظار یکی نیست: '+actualAuthority);
     if(!asset.metadata.isMutable) throw new Error('متادیتای توکن تغییرناپذیر است؛ عملیات متوقف شد.');
