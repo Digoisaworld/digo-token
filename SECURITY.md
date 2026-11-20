@@ -31,6 +31,13 @@
 - Use idempotency keys, replay protection, timeouts, circuit breakers and audit trails.
 - Minimize data collection, encrypt sensitive data and redact secrets from telemetry.
 
+## Repository history review
+
+- The current `index.html` wallet button only requests a public-address connection. It does not request a signature or submit a transaction.
+- Older commits in this repository contain an experimental token-creation and metadata-transaction interface. Those historical versions are not the current website and should not be deployed or used.
+- Removing a file from the current branch does not remove it from Git history. A full-history secret scan is configured in `.github/workflows/security.yml`; its result must be reviewed after the first successful run.
+- Do not rewrite public Git history solely to hide old experimental code unless a verified secret exposure requires incident response. If a real credential is found, revoke/rotate it first, then plan history cleanup.
+
 ## Vulnerability reporting
 A monitored security contact and response SLA must be published before public production launch. Until then, use GitHub's private vulnerability reporting feature if enabled. Do not post exploit details or personal data in public issues.
 
