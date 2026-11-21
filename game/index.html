@@ -65,17 +65,37 @@ const arena=$('arena'),falling=$('fallingItems'),player=$('player'),holdBtn=$('t
 function updateRun(){ $('runScore').textContent='Run points: '+fmt(runPoints);$('runHits').textContent='Hits: '+hits;const s=Math.floor((Date.now()-runStarted)/1000);$('runTime').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
 function movePlayer(x){const r=arena.getBoundingClientRect();playerX=Math.max(4,Math.min(96,(x-r.left)/r.width*100));player.style.left=playerX+'%';}
 function spawnItem(){const reward=Math.random()<Math.max(.12,.25-spawnCount*.00025),strong=Math.random()<.22,el=document.createElement('span');el.className='falling-item '+(reward?'reward':'bomb');el.textContent=reward?(strong?'💎':'⭐'):(strong?'💣':'☄');const it={el,x:Math.random()*88+6,y:-30,v:70+Math.random()*65+Math.min(90,spawnCount*.15),drift:(Math.random()-.5)*34,phase:Math.random()*6.28,reward,strong};el.style.left=it.x+'%';falling.append(el);items.push(it);spawnCount++;}
-function resolveItem(it,hit){it.el.remove();items=items.filter(x=>x!==it);if(hit){if(it.reward){const gain=Math.max(3,Math.round(Math.max(10,score)* (it.strong?.12:.05)));score+=gain;pending+=gain;runPoints+=gain;status('Reward collected · +'+gain);}else{const loss=Math.min(score,Math.max(5,Math.round(score*(it.strong?.12:.05))));score-=loss;runPoints=Math.max(0,runPoints-loss);hits++;status('Bomb impact · −'+loss);$('game').classList.add('shake');setTimeout(()=>$('game').classList.remove('shake'),250);}}render();updateRun();}
+function resolveItem(it,hit){it.el.remove();items=items.filter(x=>x!==it);if(hit){if(it.reward){const gain=Math.max(3,Math.round(Math.max(10,runPoints)* (it.strong?.12:.05)));runPoints+=gain;status('Preview reward · +'+gain+' (not server-verified)');}else{const loss=Math.min(runPoints,Math.max(5,Math.round(runPoints*(it.strong?.12:.05))));runPoints=Math.max(0,runPoints-loss);hits++;status('Preview bomb impact · −'+loss+' (not server-verified)');$('game').classList.add('shake');setTimeout(()=>$('game').classList.remove('shake'),250);}}render();updateRun();}
 function gameFrame(ts){if(!holding){raf=0;return;}if(!lastFrame)lastFrame=ts;const dt=Math.min(.05,(ts-lastFrame)/1000);lastFrame=ts;if(ts-lastSpawn>1150+Math.random()*650){spawnItem();lastSpawn=ts;}for(const it of [...items]){it.y+=it.v*dt;it.x+=Math.sin(ts/430+it.phase)*it.drift*dt/30;it.x=Math.max(1,Math.min(96,it.x));it.el.style.transform='translate('+it.x+'%,'+it.y+'px)';if(it.y>arena.clientHeight-40&&it.y<arena.clientHeight-3&&Math.abs(it.x-playerX)<9)resolveItem(it,true);else if(it.y>arena.clientHeight+25)resolveItem(it,false);}updateRun();raf=requestAnimationFrame(gameFrame);}
-function startHold(e){if(holding)return;if(API&&!token){status('Connect Phantom first. Gameplay points remain a local preview and are not saved to the server.');return;}holding=true;runStarted=runStarted||Date.now();$('runState').textContent='RUNNING';holdBtn.classList.add('holding');if(e.clientX)movePlayer(e.clientX);lastSpawn=0;lastFrame=0;raf=requestAnimationFrame(gameFrame);holdTimer=setInterval(()=>{if(!holding)return;score++;runPoints++;taps++;render();updateRun();},900);}
-function stopHold(){if(!holding)return;holding=false;clearInterval(holdTimer);holdBtn.classList.remove('holding');$('runState').textContent='PAUSED';if(raf)cancelAnimationFrame(raf);raf=0;lastFrame=0;}
+let activeSessionId=null,sessionStarting=false,sessionFinishing=false;
+async function startHold(e){
+ if(holding||sessionStarting||sessionFinishing)return;
+ if(API&&!token){status('Connect Phantom first to start a server-timed session.');return;}
+ if(API){
+  sessionStarting=true;holdBtn.disabled=true;status('Starting verified game session…');
+  try{const r=await api('/v1/game/sessions/start',{method:'POST',body:JSON.stringify({})});activeSessionId=r.sessionId;}
+  catch(err){sessionStarting=false;holdBtn.disabled=false;status(err.message==='session_already_active'?'An earlier session is still active. Reload your account or try again shortly.':'Could not start verified session: '+err.message);return;}
+  sessionStarting=false;holdBtn.disabled=false;
+ }
+ holding=true;runStarted=runStarted||Date.now();$('runState').textContent='RUNNING';holdBtn.classList.add('holding');if(e.clientX)movePlayer(e.clientX);lastSpawn=0;lastFrame=0;raf=requestAnimationFrame(gameFrame);
+ holdTimer=setInterval(()=>{if(!holding)return;if(!API){score++;taps++;}runPoints++;render();updateRun();},900);
+}
+async function stopHold(){
+ if(!holding)return;holding=false;clearInterval(holdTimer);holdBtn.classList.remove('holding');$('runState').textContent='PAUSED';if(raf)cancelAnimationFrame(raf);raf=0;lastFrame=0;
+ if(API&&activeSessionId){
+  const sessionId=activeSessionId;activeSessionId=null;sessionFinishing=true;holdBtn.disabled=true;status('Finalizing verified session…');
+  try{const r=await api('/v1/game/sessions/finish',{method:'POST',body:JSON.stringify({sessionId,requestId:crypto.randomUUID()})});score=r.totalPoints;taps=r.totalTaps;render();status('Verified hold points saved: +'+r.sessionPoints+'. Collision effects remain preview-only.');}
+  catch(err){status('Session finalization failed: '+err.message+'. Contact support before starting another session.');}
+  finally{sessionFinishing=false;holdBtn.disabled=false;}
+ }
+}
 holdBtn.addEventListener('pointerdown',e=>{e.preventDefault();startHold(e);});holdBtn.addEventListener('pointermove',e=>{if(holding&&e.clientX)movePlayer(e.clientX);});['pointerup','pointercancel','lostpointercapture','pointerleave'].forEach(ev=>holdBtn.addEventListener(ev,stopHold));
 arena.addEventListener('pointermove',e=>{if(holding)movePlayer(e.clientX);});arena.addEventListener('pointerdown',e=>{if(holding)movePlayer(e.clientX);});window.addEventListener('blur',stopHold);
 $('mascot').style.cursor='default';$('mascot').removeAttribute('role');$('mascot').removeAttribute('tabindex');
 $('tap').disabled=!!API;
 $('connect').addEventListener('click',connect);
 async function leaderboard(){if(!API)return;try{const r=await api('/v1/leaderboard?limit=5');const host=document.querySelector('.bottom .panel');if(!host)return;const old=host.querySelector('.leaderrows');if(old)old.remove();const box=document.createElement('div');box.className='leaderrows';box.style.marginTop='12px';for(const x of r.items){const row=document.createElement('div');row.style.cssText='display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #263746;font-size:12px';const left=document.createElement('span');left.textContent='#'+x.rank+'  '+x.wallet.slice(0,5)+'…'+x.wallet.slice(-4);const right=document.createElement('strong');right.textContent=fmt(x.totalPoints)+' pts';row.append(left,right);box.append(row)}host.append(box)}catch{}}
-render();if(!API)status('Preview ready · hold to play; points are local and reset on reload.');else{status('Connect Phantom to load your saved score.');leaderboard();setInterval(leaderboard,30000)}
+render();if(!API)status('Preview ready · hold to play; points are local and reset on reload.');else{status('Connect Phantom to load your saved score. Only server-timed hold points are verified; collisions remain preview-only.');leaderboard();setInterval(leaderboard,30000)}
 })();
 </script>
 </body></html>
