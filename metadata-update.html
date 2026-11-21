@@ -87,6 +87,7 @@ $("inspect").addEventListener("click",async()=>{
     const mutable=asset.metadata.isMutable===true;
     const authorityOK=actualAuthority===AUTHORITY;
     const uriOK=actualUri===OLD_URI;
+    const alreadyUpdated=actualUri===NEW_URI;
     const lines=[
       "Mint: "+MINT,
       "On-chain update authority: "+actualAuthority,
@@ -94,11 +95,13 @@ $("inspect").addEventListener("click",async()=>{
       "Current on-chain URI: "+actualUri,
       "Metadata mutable: "+String(mutable),
       "Authority match: "+String(authorityOK),
-      "Expected old URI match: "+String(uriOK)
+      "Expected old URI match: "+String(uriOK),
+      "New URI already active: "+String(alreadyUpdated)
     ];
     $("checks").textContent=lines.join("\n");$("checks").classList.remove("hidden");
-    if(!authorityOK||!uriOK||!mutable) throw new Error("Safety check failed. No transaction will be prepared. Check the displayed on-chain values.");
-    verified=true;status("All checks passed. Review the values below before preparing the Phantom transaction.");
+    if(!authorityOK||(!uriOK&&!alreadyUpdated)||!mutable) throw new Error("Safety check failed. No transaction will be prepared. Check the displayed on-chain values.");
+    if(alreadyUpdated){ verified=false; status("DIGO metadata URI is already updated on Solana Mainnet. No further transaction is needed."); result("SUCCESS: The on-chain URI already matches the new metadata file. Do not submit another update."); }
+    else { verified=true; status("All checks passed. Review the values below before preparing the Phantom transaction."); }
   }catch(e){verified=false;status("Verification failed: "+(e?.message||e));}
   finally{busy=false;enable();}
 });
