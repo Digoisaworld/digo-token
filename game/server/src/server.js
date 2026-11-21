@@ -110,7 +110,7 @@ app.post('/v1/game/sessions/finish',auth,async(req,res)=>{
     if(points>0){
       await client.query("INSERT INTO score_ledger(wallet_address,session_id,event_id,event_type,points_delta,metadata) VALUES($1,$2,$3,'hold_credit',$4,$5::jsonb)",
         [req.user.sub,sessionId,requestId,points,JSON.stringify({elapsedMs:elapsed,pointIntervalMs:HOLD_POINT_INTERVAL_MS})]);
-      await client.query('UPDATE game_accounts SET total_points=total_points+$2,total_taps=total_taps+$2,updated_at=NOW() WHERE wallet_address=$1',[req.user.sub,points]);
+      await client.query('UPDATE game_accounts SET total_points=total_points+$2,updated_at=NOW() WHERE wallet_address=$1',[req.user.sub,points]);
     }
     const a=await client.query('SELECT total_points,total_taps FROM game_accounts WHERE wallet_address=$1',[req.user.sub]);
     await client.query('COMMIT');
