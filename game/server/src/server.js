@@ -69,6 +69,59 @@ app.get('/v1/me',auth,async(req,res)=>{
   const a=r.rows[0];res.json({wallet:a.wallet_address,totalPoints:Number(a.total_points),totalTaps:Number(a.total_taps),createdAt:a.created_at});
 });
 
+const MAX_SESSION_MS = 30 * 60 * 1000;
+const HOLD_POINT_INTERVAL_MS = 900;
+const MAX_SESSION_POINTS = Math.floor(MAX_SESSION_MS / HOLD_POINT_INTERVAL_MS);
+
+app.post('/v1/game/sessions/start',auth,async(req,res)=>{
+  const sessionId=randomUUID();
+  const client=await pool.connect();
+  try{
+    await client.query('BEGIN');
+    await client.query("UPDATE game_sessions SET status='expired',ended_at=NOW(),elapsed_ms=$2,finish_request_id=$3 WHERE wallet_address=$1 AND status='active' AND started_at < NOW() - INTERVAL '30 minutes'",
+      [req.user.sub,MAX_SESSION_MS,randomUUID()]);
+    const active=await client.query("SELECT session_id,started_at FROM game_sessions WHERE wallet_address=$1 AND status='active' FOR UPDATE",[req.user.sub]);
+    if(active.rowCount){await client.query('ROLLBACK');return res.status(409).json({error:'session_already_active',sessionId:active.rows[0].session_id,startedAt:active.rows[0].started_at})}
+    await client.query('INSERT INTO game_sessions(session_id,wallet_address) VALUES($1,$2)',[sessionId,req.user.sub]);
+    await client.query('COMMIT');
+    res.status(201).json({sessionId,startedAt:new Date().toISOString(),maxDurationMs:MAX_SESSION_MS,pointIntervalMs:HOLD_POINT_INTERVAL_MS});
+  }catch(e){await client.query('ROLLBACK');if(e.code==='23505')return res.status(409).json({error:'session_already_active'});console.error('session start failed',e);res.status(500).json({error:'internal_error'})}
+  finally{client.release()}
+});
+
+app.post('/v1/game/sessions/finish',auth,async(req,res)=>{
+  const {sessionId,requestId}=req.body||{};
+  const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if(typeof sessionId!=='string'||!uuid.test(sessionId)||typeof requestId!=='string'||!uuid.test(requestId))return res.status(400).json({error:'invalid_request'});
+  const client=await pool.connect();
+  try{
+    await client.query('BEGIN');
+    const s=await client.query('SELECT * FROM game_sessions WHERE session_id=$1 AND wallet_address=$2 FOR UPDATE',[sessionId,req.user.sub]);
+    if(!s.rowCount){await client.query('ROLLBACK');return res.status(404).json({error:'session_not_found'})}
+    const row=s.rows[0];
+    if(row.status!=='active'){
+      if(row.finish_request_id===requestId){const a=await client.query('SELECT total_points,total_taps FROM game_accounts WHERE wallet_address=$1',[req.user.sub]);await client.query('COMMIT');return res.json({completed:true,duplicate:true,sessionPoints:Number(row.points_awarded),totalPoints:Number(a.rows[0].total_points),totalTaps:Number(a.rows[0].total_taps)})}
+      await client.query('ROLLBACK');return res.status(409).json({error:'session_already_finished'});
+    }
+    const elapsed=Math.max(0,Math.min(MAX_SESSION_MS,Date.now()-new Date(row.started_at).getTime()));
+    const points=Math.min(MAX_SESSION_POINTS,Math.floor(elapsed/HOLD_POINT_INTERVAL_MS));
+    await client.query("UPDATE game_sessions SET status='completed',ended_at=NOW(),elapsed_ms=$2,points_awarded=$3,finish_request_id=$4 WHERE session_id=$1",[sessionId,elapsed,points,requestId]);
+    if(points>0){
+      await client.query("INSERT INTO score_ledger(wallet_address,session_id,event_id,event_type,points_delta,metadata) VALUES($1,$2,$3,'hold_credit',$4,$5::jsonb)",
+        [req.user.sub,sessionId,requestId,points,JSON.stringify({elapsedMs:elapsed,pointIntervalMs:HOLD_POINT_INTERVAL_MS})]);
+      await client.query('UPDATE game_accounts SET total_points=total_points+$2,total_taps=total_taps+$2,updated_at=NOW() WHERE wallet_address=$1',[req.user.sub,points]);
+    }else{
+      await client.query("INSERT INTO score_ledger(wallet_address,session_id,event_id,event_type,points_delta,metadata) VALUES($1,$2,$3,'hold_credit',-1,$4::jsonb)",
+        [req.user.sub,sessionId,requestId,JSON.stringify({elapsedMs:elapsed,zeroAwardMarker:true})]);
+      await client.query('DELETE FROM score_ledger WHERE wallet_address=$1 AND event_id=$2',[req.user.sub,requestId]);
+    }
+    const a=await client.query('SELECT total_points,total_taps FROM game_accounts WHERE wallet_address=$1',[req.user.sub]);
+    await client.query('COMMIT');
+    res.json({completed:true,sessionPoints:points,elapsedMs:elapsed,totalPoints:Number(a.rows[0].total_points),totalTaps:Number(a.rows[0].total_taps)});
+  }catch(e){await client.query('ROLLBACK');console.error('session finish failed',e);res.status(500).json({error:'internal_error'})}
+  finally{client.release()}
+});
+
 app.post('/v1/game/taps',auth,async(req,res)=>{
   const {requestId,taps}=req.body||{};
   if(typeof requestId!=='string'||! /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(requestId)||!Number.isInteger(taps)||taps<1||taps>MAX_TAPS) return res.status(400).json({error:'invalid_tap_batch',maxTaps:MAX_TAPS});
