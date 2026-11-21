@@ -10,7 +10,7 @@ The first visual UI is implemented in `game/index.html`: dark premium arena, ora
 - Original mascot direction follows the user-provided orange, round, big-eyed character reference (not the retired dog/SHIBA logo).
 - Tap-to-earn demo points, evolution milestones, cosmetic unlocks and simple effects.
 - Optional Phantom public-wallet connection for session display only.
-- Demo points persist in the current browser via localStorage.
+- Preview run points are held in page memory only and reset on reload; they are not persisted.
 
 ## Important limitations
 This is a frontend prototype only. Demo points are not DIGO tokens, are not stored on a server, are not transferable, and cannot be withdrawn. Browser storage is user-editable and must never be treated as authoritative.
@@ -60,3 +60,9 @@ This gameplay loop is a frontend preview, not production scoring. The existing A
 
 ### Character artwork
 The current page still contains the earlier CSS approximation. Replace it with the user's exact approved DIGO character artwork before calling the visual milestone complete. Do not substitute the retired dog/SHIBA logo.
+
+
+## Preview scoring safety correction
+The hold-and-dodge frontend intentionally does **not** submit its points to the legacy `/v1/game/taps` endpoint. That endpoint only supports positive tap batches and cannot represent bomb deductions or reward pickups. This avoids silently crediting points that do not match the displayed run score. Until an authoritative session/event API is implemented and tested, all gameplay points are preview-only, reset on reload, and ineligible for leaderboard or token payout. Phantom authentication, when configured, is for account identity only and does not make preview gameplay scores persistent.
+
+The arena CSS was corrected so the mascot eyes and hold button receive their intended dimensions and styling. The exact approved mascot artwork is still required before visual sign-off.
