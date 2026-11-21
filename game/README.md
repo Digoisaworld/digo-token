@@ -66,3 +66,9 @@ The current page still contains the earlier CSS approximation. Replace it with t
 The hold-and-dodge frontend intentionally does **not** submit its points to the legacy `/v1/game/taps` endpoint. That endpoint only supports positive tap batches and cannot represent bomb deductions or reward pickups. This avoids silently crediting points that do not match the displayed run score. Until an authoritative session/event API is implemented and tested, all gameplay points are preview-only, reset on reload, and ineligible for leaderboard or token payout. Phantom authentication, when configured, is for account identity only and does not make preview gameplay scores persistent.
 
 The arena CSS was corrected so the mascot eyes and hold button receive their intended dimensions and styling. The exact approved mascot artwork is still required before visual sign-off.
+
+
+## Server-timed session API (backend foundation)
+An additive migration `game/server/migrations/002_authoritative_sessions.sql` introduces `game_sessions` and `score_ledger`. The API now has authenticated `POST /v1/game/sessions/start` and `POST /v1/game/sessions/finish` routes. The server uses the PostgreSQL clock to calculate elapsed time, awards at most one point per 900 ms, caps a session at 30 minutes, allows one active session per wallet, and makes finish idempotent for the same request UUID.
+
+**This does not yet validate the falling-object game.** Bomb penalties, reward pickups and player movement remain local preview effects. The new session API is not wired into the browser UI yet; do not treat any on-screen run score as a verified score. The legacy taps endpoint remains separate. Apply migration 002 before testing the new routes.
