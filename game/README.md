@@ -2,6 +2,9 @@
 
 This project is intentionally kept on the `feature/digo-evolution-game` branch and is not merged into the live website.
 
+## UI milestone — completed prototype
+The first visual UI is implemented in `game/index.html`: dark premium arena, orange mascot recreated from the supplied reference features (large glossy eyes, round peach body, orange feet), responsive layout, touch feedback, evolution cosmetics and Phantom public-address connection. No dog, mouse or unrelated character imagery is used.
+
 ## Current prototype
 - Responsive mobile-first tap game UI.
 - Original mascot direction follows the user-provided orange, round, big-eyed character reference (not the retired dog/SHIBA logo).
