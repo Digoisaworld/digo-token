@@ -22,7 +22,7 @@ This API is a development scaffold. It is not deployed and does not send DIGO to
 
 ## Security and known limitations
 - Phantom sign-in uses a one-time server nonce, expiry, exact-message Ed25519 verification and JWT.
-- Hold sessions are timed using the database clock, limited to one active session per wallet, capped at 30 minutes, and finalized transactionally with an idempotent request UUID. Credits are written to `score_ledger`.
+- Hold sessions are timed using the database clock, limited to one active session per wallet, capped at 30 minutes, and finalized transactionally with an idempotent request UUID. Credits are written to `score_ledger`. Hold-session credits update `total_points` only; `total_taps` remains a count of legacy tap events and is not inflated by timed play.
 - The session endpoint currently validates elapsed hold time only. It does not validate movement, bomb collisions or reward pickups. Those gameplay effects remain preview-only and must not be included in payout or a public competitive leaderboard.
 - The legacy tap endpoint is separate and must not be mixed with hold-session scores.
 - This is a baseline, not a complete anti-cheat system. Automated tapping/bots, multiple accounts and Sybil abuse still require additional detection, challenge/risk controls and operational monitoring before rewards.
