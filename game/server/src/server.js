@@ -103,17 +103,14 @@ app.post('/v1/game/sessions/finish',auth,async(req,res)=>{
       if(row.finish_request_id===requestId){const a=await client.query('SELECT total_points,total_taps FROM game_accounts WHERE wallet_address=$1',[req.user.sub]);await client.query('COMMIT');return res.json({completed:true,duplicate:true,sessionPoints:Number(row.points_awarded),totalPoints:Number(a.rows[0].total_points),totalTaps:Number(a.rows[0].total_taps)})}
       await client.query('ROLLBACK');return res.status(409).json({error:'session_already_finished'});
     }
-    const elapsed=Math.max(0,Math.min(MAX_SESSION_MS,Date.now()-new Date(row.started_at).getTime()));
+    const timing=await client.query("SELECT GREATEST(0,LEAST($2,FLOOR(EXTRACT(EPOCH FROM (NOW()-$1))*1000)))::integer AS elapsed_ms",[row.started_at,MAX_SESSION_MS]);
+    const elapsed=Number(timing.rows[0].elapsed_ms);
     const points=Math.min(MAX_SESSION_POINTS,Math.floor(elapsed/HOLD_POINT_INTERVAL_MS));
     await client.query("UPDATE game_sessions SET status='completed',ended_at=NOW(),elapsed_ms=$2,points_awarded=$3,finish_request_id=$4 WHERE session_id=$1",[sessionId,elapsed,points,requestId]);
     if(points>0){
       await client.query("INSERT INTO score_ledger(wallet_address,session_id,event_id,event_type,points_delta,metadata) VALUES($1,$2,$3,'hold_credit',$4,$5::jsonb)",
         [req.user.sub,sessionId,requestId,points,JSON.stringify({elapsedMs:elapsed,pointIntervalMs:HOLD_POINT_INTERVAL_MS})]);
       await client.query('UPDATE game_accounts SET total_points=total_points+$2,total_taps=total_taps+$2,updated_at=NOW() WHERE wallet_address=$1',[req.user.sub,points]);
-    }else{
-      await client.query("INSERT INTO score_ledger(wallet_address,session_id,event_id,event_type,points_delta,metadata) VALUES($1,$2,$3,'hold_credit',-1,$4::jsonb)",
-        [req.user.sub,sessionId,requestId,JSON.stringify({elapsedMs:elapsed,zeroAwardMarker:true})]);
-      await client.query('DELETE FROM score_ledger WHERE wallet_address=$1 AND event_id=$2',[req.user.sub,requestId]);
     }
     const a=await client.query('SELECT total_points,total_taps FROM game_accounts WHERE wallet_address=$1',[req.user.sub]);
     await client.query('COMMIT');
