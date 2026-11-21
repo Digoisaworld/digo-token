@@ -27,3 +27,21 @@ No production backend has been found/confirmed in the reviewed repository docume
 
 ## Integration
 The game is standalone under `game/`. It can later be embedded or linked from the main DIGO website after review. Do not merge to `main` until backend persistence, authentication, anti-cheat and deployment are implemented and tested.
+
+
+## Frontend/API integration status
+The browser UI now contains the integration flow:
+1. Connect Phantom.
+2. Request a one-time nonce from the API.
+3. Sign the exact login message with Phantom (no transaction).
+4. Verify the Ed25519 signature and receive a short-lived JWT.
+5. Load the wallet's server-side score and submit tap batches with idempotency UUIDs.
+6. Refresh the leaderboard periodically.
+
+Before it can connect, set the public API origin in `game/config.js`:
+```js
+window.DIGO_GAME_API_URL = 'https://YOUR-API-HOST';
+```
+The current value is intentionally empty because no API host has been deployed yet. The page will show a clear setup message and will not award pretend local points.
+
+**Important:** Frontend integration is implemented but not yet end-to-end tested against a deployed API. Do not announce persistent scoring as live until deployment, database migration, CORS/TLS configuration and end-to-end tests pass. Clicker games need bot/Sybil detection and abuse review before token rewards are enabled.
