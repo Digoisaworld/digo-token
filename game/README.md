@@ -45,3 +45,18 @@ window.DIGO_GAME_API_URL = 'https://YOUR-API-HOST';
 The current value is intentionally empty because no API host has been deployed yet. The page will show a clear setup message and will not award pretend local points.
 
 **Important:** Frontend integration is implemented but not yet end-to-end tested against a deployed API. Do not announce persistent scoring as live until deployment, database migration, CORS/TLS configuration and end-to-end tests pass. Clicker games need bot/Sybil detection and abuse review before token rewards are enabled.
+
+
+## Hold-and-dodge gameplay prototype (in progress)
+The arena now has a pointer/touch hold control and a small falling-object loop:
+- Holding the control earns a slow point tick; releasing stops the tick.
+- Moving the pointer/finger horizontally steers the player marker.
+- Falling hazards and rewards spawn with randomized horizontal drift and speed.
+- Bomb impacts deduct a percentage of the displayed run score; reward pickups add a percentage-based bonus. Strong variants use larger percentages.
+- Spawn mix and speed increase gradually as the run continues.
+
+### Important prototype limitation
+This gameplay loop is a frontend preview, not production scoring. The existing API only accepts positive tap batches and does not yet record authoritative game sessions, movement, collisions, reward pickups or score deductions. Therefore the new hazard/reward run score must not be treated as persistent or eligible for token payout. Do not deploy this build as a live rewards game until a server-authoritative session/event protocol, replay/risk checks, score ledger for both credits and debits, and end-to-end tests are implemented.
+
+### Character artwork
+The current page still contains the earlier CSS approximation. Replace it with the user's exact approved DIGO character artwork before calling the visual milestone complete. Do not substitute the retired dog/SHIBA logo.
