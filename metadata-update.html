@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1218">
+<title>DIGO Metadata Update — URI only</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1218;--panel:#14232c;--line:#29434b;--mint:#49e0b1;--gold:#e8c477;--muted:#a9bdc1;--red:#ff8e8e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1d4545 0,transparent 55%),var(--bg);color:#f3f8f7;font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}.wrap{width:min(760px,92%);margin:32px auto 60px}a{color:var(--mint)}h1{font-size:clamp(27px,6vw,40px);line-height:1.15}.card{background:linear-gradient(145deg,#172b34,#101c24);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0}.label{color:var(--muted);font-size:13px}.value{overflow-wrap:anywhere;font-family:ui-monospace,monospace;font-size:13px}.pill{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:4px 11px;color:var(--gold);font-size:12px}.btn{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:700;background:var(--mint);color:#092019;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}.secondary{background:#20343c;color:#f3f8f7;border:1px solid var(--line)}.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.status{padding:13px;border:1px solid var(--line);border-radius:12px;color:var(--muted);overflow-wrap:anywhere}.warn{border-left:3px solid var(--gold);background:#e8c47712;padding:13px 15px;border-radius:8px}.danger{color:var(--red)}code{overflow-wrap:anywhere}.hidden{display:none}ul{padding-left:20px;color:var(--muted)}.check{color:var(--mint)}</style>
+</head>
+<body><main class="wrap">
+<a href="./">← DIGO website</a>
+<h1>DIGO metadata update</h1>
+<p class="pill">Solana Mainnet · URI-only operation</p>
+<div class="warn"><strong>Safety:</strong> This page never asks for a recovery phrase or private key. It prepares one Metaplex metadata update and asks Phantom to sign it. Review the transaction in Phantom yourself. Do not approve if the wallet, mint, instruction, or network differs from what is shown here.</div>
+<section class="card">
+<h2>Target token</h2>
+<div class="label">Mint address</div><div class="value" id="mint"></div>
+<div class="label" style="margin-top:12px">Expected current URI</div><div class="value" id="oldUri"></div>
+<div class="label" style="margin-top:12px">New URI</div><div class="value" id="newUri"></div>
+</section>
+<section class="card">
+<h2>Wallet and on-chain checks</h2>
+<div id="status" class="status" role="status" aria-live="polite">Loading Solana metadata tools…</div>
+<div class="row"><button id="connect" class="btn secondary" disabled>Connect Phantom</button><button id="inspect" class="btn secondary" disabled>Verify on-chain data</button></div>
+<div id="checks" class="status hidden" style="margin-top:14px"></div>
+</section>
+<section class="card">
+<h2>Submit update</h2>
+<ul>
+<li>Only the metadata URI is changed.</li>
+<li>Name, symbol, seller fee, creators and other existing metadata fields are preserved from the on-chain account.</li>
+<li>Token supply, balances, mint authority and freeze authority are not changed by this instruction.</li>
+<li>Network fee is paid by the connected wallet.</li>
+</ul>
+<div class="row"><button id="submit" class="btn" disabled>Prepare URI update in Phantom</button></div>
+<p class="label">The submit button stays disabled until the connected wallet, update authority, current URI and mutable status are verified.</p>
+</section>
+<div id="result" class="status">No transaction has been submitted.</div>
+<p class="label">DIGO project tool. Source code is public in the <a href="https://github.com/Digoisaworld/digo-token" target="_blank" rel="noopener noreferrer">DIGO repository</a>. Never share your secret recovery phrase.</p>
+</main>
+<script type="module">
+import { createUmi } from "https://esm.sh/@metaplex-foundation/umi-bundle-defaults";
+import { mplTokenMetadata, fetchDigitalAsset, updateV1 } from "https://esm.sh/@metaplex-foundation/mpl-token-metadata";
+import { publicKey, some } from "https://esm.sh/@metaplex-foundation/umi";
+import { walletAdapterIdentity } from "https://esm.sh/@metaplex-foundation/umi-signer-wallet-adapters";
+
+const MINT = "7gqusyDEx6L7JNUfDEUftzdKRSejgzCUk7QCUwocYG1F";
+const AUTHORITY = "HK7Fh86hwAQwjqmLrm8L1JLVS57Eo7jD2FfzaHdhmZbQ";
+const OLD_URI = "https://raw.githubusercontent.com/Digoisaworld/digo-token/main/metadata/token.json";
+const NEW_URI = "https://raw.githubusercontent.com/Digoisaworld/digo-token/main/metadata/token-v2.json";
+const RPC = "https://api.mainnet-beta.solana.com";
+const $ = id => document.getElementById(id);
+$("mint").textContent=MINT; $("oldUri").textContent=OLD_URI; $("newUri").textContent=NEW_URI;
+let umi=null, provider=null, wallet=null, asset=null, verified=false, busy=false;
+function status(s){$("status").textContent=s}
+function result(s){$("result").textContent=s}
+function enable(){ $("inspect").disabled=!wallet||busy; $("submit").disabled=!verified||busy; }
+try {
+  umi=createUmi(RPC).use(mplTokenMetadata());
+  $("connect").disabled=false;
+  status("Tools loaded. Connect the Phantom wallet that owns the metadata update authority.");
+} catch(e) { status("Could not load Metaplex tools: "+(e?.message||e)); }
+function getProvider(){return window.phantom?.solana || (window.solana?.isPhantom?window.solana:null);}
+$("connect").addEventListener("click",async()=>{
+  try{
+    provider=getProvider();
+    if(!provider) throw new Error("Phantom provider not detected. Open this page inside Phantom's in-app browser.");
+    const connected=await provider.connect();
+    const address=connected?.publicKey?.toString()||provider.publicKey?.toString();
+    if(address!==AUTHORITY) throw new Error("Wrong wallet. Connected address does not match the recorded DIGO update authority. Disconnect and switch accounts in Phantom.");
+    wallet={publicKey:provider.publicKey, signTransaction:tx=>provider.signTransaction(tx), signAllTransactions:txs=>provider.signAllTransactions(txs)};
+    umi.use(walletAdapterIdentity(wallet));
+    verified=false; asset=null;
+    status("Connected wallet matches the recorded DIGO update authority: "+address);
+    $("checks").classList.add("hidden"); enable();
+  }catch(e){wallet=null;verified=false;asset=null;status("Connection/check failed: "+(e?.message||e));enable();}
+});
+$("inspect").addEventListener("click",async()=>{
+  if(!wallet||busy)return;
+  busy=true;verified=false;enable();status("Reading DIGO metadata account from Solana Mainnet…");
+  try{
+    asset=await fetchDigitalAsset(umi,publicKey(MINT));
+    const actualAuthority=String(asset.metadata.updateAuthority);
+    const actualUri=asset.metadata.uri;
+    const mutable=asset.metadata.isMutable===true;
+    const authorityOK=actualAuthority===AUTHORITY;
+    const uriOK=actualUri===OLD_URI;
+    const lines=[
+      "Mint: "+MINT,
+      "On-chain update authority: "+actualAuthority,
+      "Connected wallet: "+provider.publicKey.toString(),
+      "Current on-chain URI: "+actualUri,
+      "Metadata mutable: "+String(mutable),
+      "Authority match: "+String(authorityOK),
+      "Expected old URI match: "+String(uriOK)
+    ];
+    $("checks").textContent=lines.join("\n");$("checks").classList.remove("hidden");
+    if(!authorityOK||!uriOK||!mutable) throw new Error("Safety check failed. No transaction will be prepared. Check the displayed on-chain values.");
+    verified=true;status("All checks passed. Review the values below before preparing the Phantom transaction.");
+  }catch(e){verified=false;status("Verification failed: "+(e?.message||e));}
+  finally{busy=false;enable();}
+});
+$("submit").addEventListener("click",async()=>{
+  if(!verified||!wallet||!asset||busy)return;
+  const ok=confirm("You are about to update ONLY the DIGO metadata URI on Solana Mainnet.\n\nMint: "+MINT+"\nWallet: "+provider.publicKey.toString()+"\nNew URI: "+NEW_URI+"\n\nPhantom will show the transaction for your review. Continue?");
+  if(!ok)return;
+  busy=true;enable();result("Building the URI-only metadata update. Review and approve it in Phantom only if every detail is correct.");
+  try{
+    const updatedData={...asset.metadata,uri:NEW_URI};
+    const response=await updateV1(umi,{mint:publicKey(MINT),authority:umi.identity,data:some(updatedData)}).sendAndConfirm(umi);
+    const sig=response.signature?Array.from(response.signature).map(b=>b.toString(16).padStart(2,"0")).join(""):"Submitted";
+    result("Transaction submitted/confirmed. Signature: "+sig+" — verify the new URI independently in Solana Explorer before assuming Phantom has refreshed.");
+    verified=false;asset=null;status("Update request completed. Re-run on-chain verification to confirm the new URI.");
+  }catch(e){result("Transaction was not confirmed: "+(e?.message||e)+". Check Phantom and the Solana Explorer before retrying; do not submit repeatedly.");}
+  finally{busy=false;enable();}
+});
+</script>
+</body></html>
