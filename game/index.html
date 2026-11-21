@@ -72,7 +72,7 @@ function stopHold(){if(!holding)return;holding=false;clearInterval(holdTimer);ho
 holdBtn.addEventListener('pointerdown',e=>{e.preventDefault();startHold(e);});holdBtn.addEventListener('pointermove',e=>{if(holding&&e.clientX)movePlayer(e.clientX);});['pointerup','pointercancel','lostpointercapture','pointerleave'].forEach(ev=>holdBtn.addEventListener(ev,stopHold));
 arena.addEventListener('pointermove',e=>{if(holding)movePlayer(e.clientX);});arena.addEventListener('pointerdown',e=>{if(holding)movePlayer(e.clientX);});window.addEventListener('blur',stopHold);
 $('mascot').style.cursor='default';$('mascot').removeAttribute('role');$('mascot').removeAttribute('tabindex');
-$('tap').disabled=true;
+$('tap').disabled=!!API;
 $('connect').addEventListener('click',connect);
 async function leaderboard(){if(!API)return;try{const r=await api('/v1/leaderboard?limit=5');const host=document.querySelector('.bottom .panel');if(!host)return;const old=host.querySelector('.leaderrows');if(old)old.remove();const box=document.createElement('div');box.className='leaderrows';box.style.marginTop='12px';for(const x of r.items){const row=document.createElement('div');row.style.cssText='display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #263746;font-size:12px';const left=document.createElement('span');left.textContent='#'+x.rank+'  '+x.wallet.slice(0,5)+'…'+x.wallet.slice(-4);const right=document.createElement('strong');right.textContent=fmt(x.totalPoints)+' pts';row.append(left,right);box.append(row)}host.append(box)}catch{}}
 render();if(!API)status('Preview ready · hold to play; points are local and reset on reload.');else{status('Connect Phantom to load your saved score.');leaderboard();setInterval(leaderboard,30000)}
